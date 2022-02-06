@@ -8,7 +8,7 @@
   "template": "docker",
   "templateVersion": "0.29.25",
   "devDependencies": {
-    "@cubejs-backend/postgres-driver": "^0.29.25",
+    "@cubejs-backend/bigquery-driver": "^0.29.25",
     "@cubejs-backend/server": "^0.29.25"
   }
 }
