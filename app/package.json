@@ -16,6 +16,7 @@
     "vue-chartkick": "^1.1.0"
   },
   "devDependencies": {
+    "@types/node": "^17.0.15",
     "@types/vue-chartkick": "^0.5.1",
     "@vitejs/plugin-vue": "^2.0.0",
     "autoprefixer": "^10.4.2",

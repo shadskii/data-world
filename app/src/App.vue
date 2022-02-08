@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import SimpleChart from './components/simple-chart.vue';
+import PopulationChart from "./components/population-chart.vue";
 </script>
 
 <template>
-  <SimpleChart />
+  <PopulationChart />
 </template>
 
 <style>

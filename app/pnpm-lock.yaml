@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@cubejs-client/core': ^0.29.23
   '@cubejs-client/vue': ^0.29.23
+  '@types/node': ^17.0.15
   '@types/vue-chartkick': ^0.5.1
   '@vitejs/plugin-vue': ^2.0.0
   autoprefixer: ^10.4.2
@@ -27,6 +28,7 @@ dependencies:
   vue-chartkick: 1.1.0_vue@3.2.29
 
 devDependencies:
+  '@types/node': 17.0.15
   '@types/vue-chartkick': 0.5.1
   '@vitejs/plugin-vue': 2.1.0_vite@2.7.13+vue@3.2.29
   autoprefixer: 10.4.2_postcss@8.4.6
@@ -141,6 +143,10 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
+    dev: true
+
+  /@types/node/17.0.15:
+    resolution: {integrity: sha512-zWt4SDDv1S9WRBNxLFxFRHxdD9tvH8f5/kg5/IaLFdnSNXsDY4eL3Q3XXN+VxUnWIhyVFDwcsmAprvwXoM/ClA==}
     dev: true
 
   /@types/parse-json/4.0.0:
