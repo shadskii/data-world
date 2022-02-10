@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import PopulationChart from "./components/population-chart.vue";
+import PopulationMap from "./components/population-map.vue";
 </script>
 
 <template>
-  <PopulationChart />
+  <!-- <PopulationChart /> -->
+  <PopulationMap />
 </template>
 
 <style>
