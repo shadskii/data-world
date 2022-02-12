@@ -25,7 +25,11 @@ const selectedCountry = ref<CountryCode | null>(null);
         <BaseSelect :values="years" v-model="selectedYear" />
       </div>
       <div class="text-left p-2" v-if="selectedCountry && data">
-        <h2 class="text-4xl">
+        <img
+          :src="`https://countryflagsapi.com/svg/${selectedCountry}`"
+          class="h-48"
+        />
+        <h2 class="text-4xl mt-2">
           {{ countryNames[selectedCountry] }}
         </h2>
         <h3 class="text-xl mt-3">
