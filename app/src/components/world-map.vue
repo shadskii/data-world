@@ -23,7 +23,10 @@ interface CountryPolygon {
 }
 
 const container = ref<HTMLElement | undefined>();
-defineEmits();
+const emit = defineEmits<{
+  (e: "selected", value: CountryCode): void;
+}>();
+
 const colorScale = d3
   .scaleThreshold()
   .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
@@ -35,15 +38,22 @@ onMounted(async () => {
   const polygons = await response.json();
 
   const myGlobe = Globe();
+  console.log(container.value?.clientHeight, container.value?.clientWidth);
   myGlobe(container.value!)
     .polygonsData(polygons.features)
     .polygonStrokeColor(() => "#000")
     .polygonSideColor(() => polygonSideColor)
+    .width(container.value!.clientWidth)
+    .height(container.value!.clientHeight)
     .polygonCapColor((c) => {
       const country = c as CountryPolygon;
       return `${colorScale(props.data[country.id])}`;
     })
     .polygonAltitude(() => 0.02)
+    .onPolygonClick((c) => {
+      const country = c as CountryPolygon;
+      emit("selected", country?.id);
+    })
     .onPolygonHover((_hoverCountry) => {
       const hoverCountry = _hoverCountry as CountryPolygon;
       myGlobe
