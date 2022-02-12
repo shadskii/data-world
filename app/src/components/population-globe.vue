@@ -42,9 +42,9 @@ const selectedCountry = ref<CountryCode | null>(null);
     </div>
     <WorldMap
       v-if="dataProp"
+      v-model="selectedCountry"
       :data="dataProp"
       class="map bg-gray-900"
-      @selected="(s:CountryCode) => (selectedCountry = s)"
     />
   </div>
 </template>

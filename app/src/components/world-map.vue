@@ -5,8 +5,11 @@ import Globe, { GlobeInstance } from "globe.gl";
 import { CountryCode } from "../types/countries";
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
+const raised = 0.06;
+const lowered = 0.02;
 
 const props = defineProps<{
+  modelValue: CountryCode | undefined;
   data: Record<CountryCode, number>;
 }>();
 
@@ -25,8 +28,16 @@ interface CountryPolygon {
 
 const container = ref<HTMLElement | undefined>();
 const emit = defineEmits<{
-  (e: "selected", value: CountryCode): void;
+  (e: "update:modelValue", value: CountryCode | undefined): void;
 }>();
+const selected = computed<CountryCode | undefined>({
+  get() {
+    return props.modelValue;
+  },
+  set(code) {
+    emit("update:modelValue", code);
+  },
+});
 
 const colorScale = d3
   .scaleThreshold()
@@ -43,7 +54,10 @@ onMounted(async () => {
     .value(container.value!)
     .polygonsData(polygons.features)
     .polygonStrokeColor(() => "#000")
-    .polygonSideColor(() => polygonSideColor)
+    .polygonSideColor((c) => {
+      const country = c as CountryPolygon;
+      return country.id === selected.value ? "red" : polygonSideColor;
+    })
     .width(container.value!.clientWidth)
     .height(container.value!.clientHeight)
     .polygonCapColor((c) => {
@@ -53,13 +67,16 @@ onMounted(async () => {
     .polygonAltitude(() => 0.02)
     .onPolygonClick((c) => {
       const country = c as CountryPolygon;
-      emit("selected", country?.id);
+      selected.value = country.id;
     })
     .onPolygonHover((_hoverCountry) => {
       const hoverCountry = _hoverCountry as CountryPolygon;
       globe
-        .value!.polygonAltitude((country) => {
-          return country === hoverCountry ? 0.06 : 0.02;
+        .value!.polygonAltitude((c) => {
+          const country = c as CountryPolygon;
+          return country === hoverCountry || country.id === selected.value
+            ? raised
+            : lowered;
         })
         .polygonLabel((c) => {
           const country = c as CountryPolygon;
@@ -78,6 +95,25 @@ watch(
   },
   { deep: true }
 );
+watch(selected, (code) => {
+  globe.value
+    ?.polygonStrokeColor((c) => {
+      const country = c as CountryPolygon;
+      return country.id === code ? "red" : "#000";
+    })
+    .polygonAltitude((c) => {
+      const country = c as CountryPolygon;
+      return country.id === code ? raised : lowered;
+    })
+    .polygonSideColor((c) => {
+      const country = c as CountryPolygon;
+      return country.id === code ? "red" : polygonSideColor;
+    })
+    .pathStroke((c) => {
+      const country = c as CountryPolygon;
+      return country.id === code ? 1 : 15;
+    });
+});
 </script>
 <template>
   <div ref="container"></div>
