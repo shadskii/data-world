@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import WorldMap from "./components/world-map.vue";
+import PopulationGlobe from "./components/population-globe.vue";
 </script>
 
 <template>
-  <WorldMap />
+  <PopulationGlobe />
 </template>
 
 <style>
