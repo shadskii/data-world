@@ -18,6 +18,7 @@ specifiers:
   vite: ^2.7.2
   vue: ^3.2.25
   vue-chartkick: ^1.1.0
+  vue-router: ^4.0.12
   vue-tsc: ^0.29.8
 
 dependencies:
@@ -29,6 +30,7 @@ dependencies:
   globe.gl: 2.24.4
   vue: 3.2.29
   vue-chartkick: 1.1.0_vue@3.2.29
+  vue-router: 4.0.12_vue@3.2.29
 
 devDependencies:
   '@types/d3': 7.1.0
@@ -472,6 +474,10 @@ packages:
     dependencies:
       '@vue/compiler-dom': 3.2.29
       '@vue/shared': 3.2.29
+    dev: false
+
+  /@vue/devtools-api/6.0.8:
+    resolution: {integrity: sha512-bzei608bPVQE2yq9Ghrjn/dnpf27mWfrr0q0ZQiuZoO3LQqFG0T1xSGz+9vw1j9KAZM2Cu9vdQMkddDxqzZGNg==}
     dev: false
 
   /@vue/reactivity-transform/3.2.29:
@@ -2242,6 +2248,15 @@ packages:
       vue: '>=3.0.0'
     dependencies:
       chartkick: 4.1.1
+      vue: 3.2.29
+    dev: false
+
+  /vue-router/4.0.12_vue@3.2.29:
+    resolution: {integrity: sha512-CPXvfqe+mZLB1kBWssssTiWg4EQERyqJZes7USiqfW9B5N2x+nHlnsM1D3b5CaJ6qgCvMmYJnz+G0iWjNCvXrg==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@vue/devtools-api': 6.0.8
       vue: 3.2.29
     dev: false
 

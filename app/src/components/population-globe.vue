@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { cubejsApi } from "../api";
 import { CountryCode } from "../types/countries";
-import WorldMap from "./world-map.vue";
+import WorldMap from "@/components/world-map.vue";
 
 const chartData = ref<(string | number | boolean)[][]>([]);
 const data = ref<Record<CountryCode, number>>();

@@ -4,7 +4,9 @@ import PopulationGlobe from "./components/population-globe.vue";
 </script>
 
 <template>
-  <PopulationGlobe />
+  <main>
+    <router-view />
+  </main>
 </template>
 
 <style>
