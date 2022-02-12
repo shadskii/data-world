@@ -36,7 +36,6 @@ onMounted(async () => {
     "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
   );
   const polygons = await response.json();
-
   const myGlobe = Globe();
   console.log(container.value?.clientHeight, container.value?.clientWidth);
   myGlobe(container.value!)
