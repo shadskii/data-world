@@ -1,4 +1,8 @@
-cube(`populations`, {
+function years() {
+  return;
+}
+
+cube(`Populations`, {
   sql: ` SELECT * FROM \`bigquery-public-data.world_bank_global_population.population_by_country\``,
 
   preAggregations: {
@@ -18,9 +22,19 @@ cube(`populations`, {
       sql: `country_code`,
       type: `string`,
     },
-    _1960: {
-      sql: `year_1960`,
-      type: `number`,
-    },
+    ...Object.fromEntries(
+      Array(2008 - 1960)
+        .fill(1960)
+        .map((x, i) => {
+          const year = x + i;
+          return [
+            `_${year}`,
+            {
+              sql: `year_${year}`,
+              type: "number",
+            },
+          ];
+        })
+    ),
   },
 });

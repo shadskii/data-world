@@ -1,50 +1,44 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { cubejsApi } from "../api";
+import { computed, onMounted, ref, watch } from "vue";
+import { cubejsApi, useYearPopulationData } from "../api";
 import { countryNames } from "../types/countries";
 import type { CountryCode } from "../types/countries";
 import WorldMap from "@/components/world-map.vue";
+import BaseSelect from "./base-select.vue";
 
-const data = ref<Record<CountryCode, number>>();
-async function loadData() {
-  const cubeData = await cubejsApi.load({
-    order: {
-      "populations.country": "asc",
-    },
-    filters: [],
-    dimensions: ["populations.country", "populations._1960"],
-  });
+const years = Array(2008 - 1960)
+  .fill(1960)
+  .map((x, i) => 1960 + i);
 
-  data.value = Object.fromEntries(
-    cubeData.tablePivot().map((row) => {
-      return [row["populations.country"], row["populations._1960"]];
-    })
-  );
-}
-const selectedCountry = ref<CountryCode | null>(null);
-onMounted(() => {
-  loadData();
+const selectedYear = ref<number>(1993);
+const data = useYearPopulationData(selectedYear);
+const dataProp = computed(() => {
+  return { ...data.value };
 });
+const selectedCountry = ref<CountryCode | null>(null);
 </script>
 <template>
   <div class="flex flex-row">
     <div class="w-96 inline-block bg-gray-900 h-screen text-white">
-      <div class="bg-gray-800 text-xl p-2">
-        <h1>World Population</h1>
+      <div class="bg-gray-800 p-2 flex flex-row justify-between">
+        <h1 class="text-2xl">World Population</h1>
+        <BaseSelect :values="years" v-model="selectedYear" />
       </div>
       <div class="text-left p-2" v-if="selectedCountry && data">
         <h2 class="text-4xl">
           {{ countryNames[selectedCountry] }}
         </h2>
         <h3 class="text-xl mt-3">
-          {{ data[selectedCountry!]?.toLocaleString() }}
+          <span>
+            {{ data[selectedCountry!]?.toLocaleString() }}
+          </span>
           <span class="text-sm"> people </span>
         </h3>
       </div>
     </div>
     <WorldMap
-      v-if="data"
-      :data="data"
+      v-if="dataProp"
+      :data="dataProp"
       class="map bg-gray-900"
       @selected="(s:CountryCode) => (selectedCountry = s)"
     />
