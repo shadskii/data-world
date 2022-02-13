@@ -7,6 +7,7 @@ const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
 const raised = 0.06;
 const lowered = 0.02;
+const polygonSideColorHighlight = "#a00000";
 
 const props = defineProps<{
   modelValue: CountryCode3 | undefined;
@@ -57,7 +58,9 @@ onMounted(async () => {
     .polygonStrokeColor(() => "#000")
     .polygonSideColor((c) => {
       const country = c as CountryPolygon;
-      return country.id === selected.value ? "red" : polygonSideColor;
+      return country.id === selected.value
+        ? polygonSideColorHighlight
+        : polygonSideColor;
     })
     .width(container.value!.clientWidth)
     .height(container.value!.clientHeight)
@@ -100,7 +103,7 @@ watch(selected, (code) => {
   globe.value
     ?.polygonStrokeColor((c) => {
       const country = c as CountryPolygon;
-      return country.id === code ? "red" : "#000";
+      return country.id === code ? polygonSideColorHighlight : "#000";
     })
     .polygonAltitude((c) => {
       const country = c as CountryPolygon;
@@ -108,7 +111,7 @@ watch(selected, (code) => {
     })
     .polygonSideColor((c) => {
       const country = c as CountryPolygon;
-      return country.id === code ? "red" : polygonSideColor;
+      return country.id === code ? polygonSideColorHighlight : polygonSideColor;
     })
     .pathStroke((c) => {
       const country = c as CountryPolygon;
