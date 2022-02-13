@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { cubejsApi, useYearPopulationData } from "../api";
 import { countryNames } from "../types/countries";
-import type { CountryCode } from "../types/countries";
+import type { CountryCode3 } from "../types/countries";
 import WorldMap from "@/components/world-map.vue";
 import BaseSelect from "./base-select.vue";
 
@@ -15,7 +15,7 @@ const data = useYearPopulationData(selectedYear);
 const dataProp = computed(() => {
   return { ...data.value };
 });
-const selectedCountry = ref<CountryCode | null>(null);
+const selectedCountry = ref<CountryCode3 | null>(null);
 </script>
 <template>
   <div class="flex flex-row">

@@ -2,15 +2,15 @@
 import * as d3 from "d3";
 import { computed, onMounted, ref, watch } from "vue";
 import Globe, { GlobeInstance } from "globe.gl";
-import { CountryCode } from "../types/countries";
+import { CountryCode3 } from "../types/countries";
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
 const raised = 0.06;
 const lowered = 0.02;
 
 const props = defineProps<{
-  modelValue: CountryCode | undefined;
-  data: Record<CountryCode, number>;
+  modelValue: CountryCode3 | undefined;
+  data: Record<CountryCode3, number>;
 }>();
 
 interface CountryPolygon {
@@ -22,15 +22,15 @@ interface CountryPolygon {
     type: string;
     coordinates: number[][][];
   };
-  id: CountryCode;
+  id: CountryCode3;
   __id: string;
 }
 
 const container = ref<HTMLElement | undefined>();
 const emit = defineEmits<{
-  (e: "update:modelValue", value: CountryCode | undefined): void;
+  (e: "update:modelValue", value: CountryCode3 | undefined): void;
 }>();
-const selected = computed<CountryCode | undefined>({
+const selected = computed<CountryCode3 | undefined>({
   get() {
     return props.modelValue;
   },
@@ -43,6 +43,7 @@ const colorScale = d3
   .scaleThreshold()
   .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
   .range(d3.schemeBlues[7] as Iterable<number>);
+
 const globe = ref<GlobeInstance | undefined>();
 onMounted(async () => {
   const response = await fetch(
@@ -90,7 +91,7 @@ watch(
   (d) => {
     globe.value?.polygonCapColor((c) => {
       const country = c as CountryPolygon;
-      return `${colorScale(d.data[country.id])}`;
+      return `${colorScale(d.data[country.id]) || "#fff"}`;
     });
   },
   { deep: true }

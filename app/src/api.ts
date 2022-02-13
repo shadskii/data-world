@@ -1,6 +1,6 @@
 import cubejs from "@cubejs-client/core";
 import { computed, onMounted, ref, Ref, watch } from "vue";
-import { CountryCode } from "./types/countries";
+import { CountryCode3 } from "./types/countries";
 
 export const cubejsApi = cubejs(import.meta.env.VITE_CUBEJS_TOKEN, {
   apiUrl: `http://localhost:4000/cubejs-api/v1`,
@@ -8,8 +8,8 @@ export const cubejsApi = cubejs(import.meta.env.VITE_CUBEJS_TOKEN, {
 
 export function useYearPopulationData(
   year: Ref<number>
-): Ref<Record<CountryCode, number> | undefined> {
-  const data = ref<Record<CountryCode, number>>();
+): Ref<Record<CountryCode3, number> | undefined> {
+  const data = ref<Record<CountryCode3, number>>();
   async function load() {
     const yearDimension = `Populations._${year.value}`;
     const cubeData = await cubejsApi.load({
