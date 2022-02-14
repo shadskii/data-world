@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
-import { cubejsApi, useYearPopulationData } from "../api";
-import { countryNames } from "../types/countries";
-import type { CountryCode3 } from "../types/countries";
 import WorldMap from "@/components/world-map.vue";
+import { computed, ref } from "vue";
+import { useCountryArea, useYearPopulationData } from "../api";
+import type { CountryCode3 } from "../types/countries";
+import { countryNames } from "../types/countries";
 import BaseSelect from "./base-select.vue";
 
 const years = Array(2008 - 1960)
@@ -15,7 +15,8 @@ const data = useYearPopulationData(selectedYear);
 const dataProp = computed(() => {
   return { ...data.value };
 });
-const selectedCountry = ref<CountryCode3 | null>(null);
+const selectedCountry = ref<CountryCode3 | undefined>();
+const countryArea = useCountryArea(selectedCountry);
 </script>
 <template>
   <div class="flex flex-row">
@@ -38,6 +39,9 @@ const selectedCountry = ref<CountryCode3 | null>(null);
           </span>
           <span class="text-sm"> people </span>
         </h3>
+        <div>
+          {{ `${countryArea.toLocaleString()} km²` }}
+        </div>
       </div>
     </div>
     <WorldMap
