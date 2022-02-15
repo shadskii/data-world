@@ -94,7 +94,7 @@ watch(
   (d) => {
     globe.value?.polygonCapColor((c) => {
       const country = c as CountryPolygon;
-      return `${colorScale(d.data[country.id]) || "#fff"}`;
+      return `${colorScale(d.data[country.id]) || "#aaa"}`;
     });
   },
   { deep: true }
