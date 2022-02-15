@@ -2,20 +2,36 @@
 import WorldMap from "@/components/world-map.vue";
 import { computed, ref } from "vue";
 import { useCountryArea, useYearPopulationData } from "../api";
-import type { CountryCode3 } from "../types/countries";
+import {
+  convertTo2,
+  convertTo3,
+  CountryCode2,
+  CountryCode3,
+} from "../types/countries";
 import { countryNames } from "../types/countries";
 import BaseSelect from "./base-select.vue";
 
-const years = Array(2008 - 1960)
-  .fill(1960)
-  .map((x, i) => 1960 + i);
+const years = Array(2050 - 1982)
+  .fill(1982)
+  .map((x, i) => x + i);
 
 const selectedYear = ref<number>(1993);
 const data = useYearPopulationData(selectedYear);
 const dataProp = computed(() => {
-  return { ...data.value };
+  if (!data.value) return {};
+  return Object.fromEntries(
+    Object.entries(data.value).map(([countryCode, value]) => {
+      const countryCode3 = convertTo3(countryCode as CountryCode2);
+      return [countryCode3, value];
+    })
+  );
 });
+
 const selectedCountry = ref<CountryCode3 | undefined>();
+const selectedCountry2 = computed(() => {
+  if (!selectedCountry.value) return undefined;
+  return convertTo2(selectedCountry.value);
+});
 const countryArea = useCountryArea(selectedCountry);
 </script>
 <template>
@@ -35,7 +51,7 @@ const countryArea = useCountryArea(selectedCountry);
         </h2>
         <h3 class="text-xl mt-3">
           <span>
-            {{ data[selectedCountry!]?.toLocaleString() }}
+            {{ data[selectedCountry2!]?.toLocaleString() }}
           </span>
           <span class="text-sm"> people </span>
         </h3>

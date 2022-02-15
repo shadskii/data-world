@@ -760,6 +760,10 @@ export const countryNames: Record<CountryCode3, string> = {
   ZWE: "Zimbabwe",
 };
 
+export function convertTo2(countryCode: CountryCode3): CountryCode2 {
+  return countryCodeConversion[countryCode];
+}
+
 export const countryCodeConversion: Record<CountryCode3, CountryCode2> = {
   AFG: "AF",
   ALA: "AX",
@@ -1011,3 +1015,14 @@ export const countryCodeConversion: Record<CountryCode3, CountryCode2> = {
   ZMB: "ZM",
   ZWE: "ZW",
 };
+const countryCode2to3: Record<CountryCode2, CountryCode3> = Object.fromEntries(
+  Object.entries(countryCodeConversion).map((e) => {
+    const code3: CountryCode3 = e[0] as CountryCode3;
+    const code2: CountryCode2 = e[1];
+    return [code2, code3];
+  })
+) as Record<CountryCode2, CountryCode3>;
+
+export function convertTo3(countryCode: CountryCode2): CountryCode3 {
+  return countryCode2to3[countryCode];
+}

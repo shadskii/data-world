@@ -12,21 +12,33 @@ export const cubejsApi = cubejs(import.meta.env.VITE_CUBEJS_TOKEN, {
 
 export function useYearPopulationData(
   year: Ref<number>
-): Ref<Record<CountryCode3, number> | undefined> {
-  const data = ref<Record<CountryCode3, number>>();
+): Ref<Record<CountryCode2, number> | undefined> {
+  const data = ref<Record<CountryCode2, number>>();
+
   async function load() {
-    const yearDimension = `Populations._${year.value}`;
     const cubeData = await cubejsApi.load({
       filters: [],
-      dimensions: ["Populations.country", yearDimension],
+      dimensions: ["PredictedPopulation.country"],
+      measures: ["PredictedPopulation.population"],
+      timeDimensions: [
+        {
+          dimension: "PredictedPopulation.year",
+          granularity: "year",
+          dateRange: [`${year.value}`, `${year.value}`],
+        },
+      ],
     });
 
     data.value = Object.fromEntries(
       cubeData.tablePivot().map((row) => {
-        return [row["Populations.country"], row[`Populations._${year.value}`]];
+        return [
+          row["PredictedPopulation.country"],
+          row[`PredictedPopulation.population`],
+        ];
       })
     );
   }
+
   watch(year, load);
   onMounted(() => {
     load();
