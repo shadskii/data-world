@@ -1,30 +1,27 @@
 <script setup lang="ts">
 import WorldMap from "@/components/world-map.vue";
-import { computed, ref } from "vue";
-import { useCountryArea, useYearPopulationData } from "../api";
-import {
-  convertTo2,
-  convertTo3,
-  CountryCode2,
-  CountryCode3,
-} from "../types/countries";
-import { countryNames } from "../types/countries";
+import { storeToRefs } from "pinia";
+import { computed, ref, toRefs, watch } from "vue";
+import { useCountryArea } from "../api";
+import { usePopulationDataStore } from "../stores/population-data";
+import { convertTo2, CountryCode3, countryNames } from "../types/countries";
 import BaseSelect from "./base-select.vue";
 
-const years = Array(2050 - 1982)
-  .fill(1982)
-  .map((x, i) => x + i);
+const populationDataStore = usePopulationDataStore();
+populationDataStore.fetch();
 
-const selectedYear = ref<number>(1993);
-const data = useYearPopulationData(selectedYear);
-const dataProp = computed(() => {
-  if (!data.value) return {};
-  return Object.fromEntries(
-    Object.entries(data.value).map(([countryCode, value]) => {
-      const countryCode3 = convertTo3(countryCode as CountryCode2);
-      return [countryCode3, value];
-    })
-  );
+const years = computed(() => {
+  const { minYear, maxYear } = populationDataStore;
+  return Array(maxYear - minYear)
+    .fill(minYear)
+    .map((x, i) => x + i);
+});
+
+const { populationMap, populationMapCountryCode3, year } =
+  storeToRefs(populationDataStore);
+
+watch(year, () => {
+  populationDataStore.fetch();
 });
 
 const selectedCountry = ref<CountryCode3 | undefined>();
@@ -39,9 +36,9 @@ const countryArea = useCountryArea(selectedCountry);
     <div class="w-96 inline-block bg-gray-900 h-screen text-white">
       <div class="bg-gray-800 p-2 flex flex-row justify-between">
         <h1 class="text-2xl">World Population</h1>
-        <BaseSelect :values="years" v-model="selectedYear" />
+        <BaseSelect :values="years" v-model="year" />
       </div>
-      <div class="text-left p-2" v-if="selectedCountry && data">
+      <div class="text-left p-2" v-if="selectedCountry && populationMap">
         <img
           :src="`https://countryflagsapi.com/svg/${selectedCountry}`"
           class="h-48"
@@ -51,7 +48,7 @@ const countryArea = useCountryArea(selectedCountry);
         </h2>
         <h3 class="text-xl mt-3">
           <span>
-            {{ data[selectedCountry2!]?.toLocaleString() }}
+            {{ populationMap[selectedCountry2!]?.toLocaleString() }}
           </span>
           <span class="text-sm"> people </span>
         </h3>
@@ -61,9 +58,9 @@ const countryArea = useCountryArea(selectedCountry);
       </div>
     </div>
     <WorldMap
-      v-if="dataProp"
+      v-if="populationMapCountryCode3"
       v-model="selectedCountry"
-      :data="dataProp"
+      :data="populationMapCountryCode3"
       class="map bg-gray-900"
     />
   </div>

@@ -12,6 +12,7 @@ specifiers:
   chartkick: ^4.1.1
   d3: ^7.3.0
   globe.gl: ^2.24.4
+  pinia: ^2.0.11
   postcss: ^8.4.6
   tailwindcss: ^3.0.18
   typescript: ^4.4.4
@@ -28,6 +29,7 @@ dependencies:
   chartkick: 4.1.1
   d3: 7.3.0
   globe.gl: 2.24.4
+  pinia: 2.0.11_typescript@4.5.5+vue@3.2.29
   vue: 3.2.29
   vue-chartkick: 1.1.0_vue@3.2.29
   vue-router: 4.0.12_vue@3.2.29
@@ -1670,6 +1672,24 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
+  /pinia/2.0.11_typescript@4.5.5+vue@3.2.29:
+    resolution: {integrity: sha512-JzcmnMqu28PNWOjDgEDK6fTrIzX8eQZKPPKvu/fpHdpXARUj1xeVdFi3YFIMOWswqaBd589cpmAMdSSTryI9iw==}
+    peerDependencies:
+      '@vue/composition-api': ^1.4.0
+      typescript: '>=4.4.4'
+      vue: ^2.6.14 || ^3.2.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@vue/devtools-api': 6.0.8
+      typescript: 4.5.5
+      vue: 3.2.29
+      vue-demi: 0.12.1_vue@3.2.29
+    dev: false
+
   /polished/4.1.4:
     resolution: {integrity: sha512-Nq5Mbza+Auo7N3sQb1QMFaQiDO+4UexWuSGR7Cjb4Sw11SZIJcrrFtiZ+L0jT9MBsUsxDboHVASbCLbE1rnECg==}
     engines: {node: '>=10'}
@@ -2248,6 +2268,21 @@ packages:
       vue: '>=3.0.0'
     dependencies:
       chartkick: 4.1.1
+      vue: 3.2.29
+    dev: false
+
+  /vue-demi/0.12.1_vue@3.2.29:
+    resolution: {integrity: sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
       vue: 3.2.29
     dev: false
 
