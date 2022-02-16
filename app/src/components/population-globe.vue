@@ -2,11 +2,11 @@
 import WorldMap from "@/components/world-map.vue";
 import { storeToRefs } from "pinia";
 import { computed, ref, toRefs, watch } from "vue";
-import { useCountryArea } from "../api";
 import { usePopulationDataStore } from "../stores/population-data";
 import { convertTo2, CountryCode3, countryNames } from "../types/countries";
 import BaseSelect from "./base-select.vue";
 import { ScalingSquaresSpinner } from "epic-spinners";
+import { useCountryArea } from "../stores/country-area";
 
 const populationDataStore = usePopulationDataStore();
 populationDataStore.fetch();
@@ -30,7 +30,13 @@ const selectedCountry2 = computed(() => {
   if (!selectedCountry.value) return undefined;
   return convertTo2(selectedCountry.value);
 });
-const countryArea = useCountryArea(selectedCountry);
+
+const countryAreaStore = useCountryArea();
+countryAreaStore.fetch();
+
+const countryArea = computed(() => {
+  return countryAreaStore.countryArea(selectedCountry2.value!);
+});
 </script>
 <template>
   <div class="flex flex-row">
