@@ -6,6 +6,7 @@ import { useCountryArea } from "../api";
 import { usePopulationDataStore } from "../stores/population-data";
 import { convertTo2, CountryCode3, countryNames } from "../types/countries";
 import BaseSelect from "./base-select.vue";
+import { ScalingSquaresSpinner } from "epic-spinners";
 
 const populationDataStore = usePopulationDataStore();
 populationDataStore.fetch();
@@ -17,7 +18,7 @@ const years = computed(() => {
     .map((x, i) => x + i);
 });
 
-const { populationMap, populationMapCountryCode3, year } =
+const { populationMap, populationMapCountryCode3, year, loading } =
   storeToRefs(populationDataStore);
 
 watch(year, () => {
@@ -57,12 +58,20 @@ const countryArea = useCountryArea(selectedCountry);
         </div>
       </div>
     </div>
-    <WorldMap
-      v-if="populationMapCountryCode3"
-      v-model="selectedCountry"
-      :data="populationMapCountryCode3"
-      class="map bg-gray-900"
-    />
+    <div class="map bg-gray-900 relative">
+      <div class="absolute top-0 right-0 text-white z-10 p-3" v-if="loading">
+        <scaling-squares-spinner
+          :animation-duration="1250"
+          :size="30"
+          color="#fff"
+        />
+      </div>
+      <WorldMap
+        v-if="populationMapCountryCode3"
+        v-model="selectedCountry"
+        :data="populationMapCountryCode3"
+      />
+    </div>
   </div>
 </template>
 <style scoped>
