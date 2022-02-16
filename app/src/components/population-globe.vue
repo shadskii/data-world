@@ -43,7 +43,6 @@ const countryArea = computed(() => {
     <div class="w-96 inline-block bg-gray-900 h-screen text-white">
       <div class="bg-gray-800 p-2 flex flex-row justify-between">
         <h1 class="text-2xl">World Population</h1>
-        <BaseSelect :values="years" v-model="year" />
       </div>
       <div class="text-left p-2" v-if="selectedCountry && populationMap">
         <img
@@ -71,6 +70,9 @@ const countryArea = computed(() => {
           :size="30"
           color="#fff"
         />
+      </div>
+      <div class="absolute z-10 p-2">
+        <BaseSelect :values="years" v-model="year" />
       </div>
       <WorldMap
         v-if="populationMapCountryCode3"

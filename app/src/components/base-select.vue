@@ -18,7 +18,10 @@ const innerValue = computed<number>({
 });
 </script>
 <template>
-  <select class="bg-gray-600 w-36 p-1" v-model="innerValue">
+  <select
+    class="bg-gray-800 w-24 px-2 py-1 text-white rounded text-center"
+    v-model="innerValue"
+  >
     <option v-for="number in values" :value="number" :key="number">
       {{ number }}
     </option>
