@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import WorldMap from "@/components/world-map.vue";
+import { ScalingSquaresSpinner } from "epic-spinners";
 import { storeToRefs } from "pinia";
-import { computed, ref, toRefs, watch } from "vue";
+import { computed, ref, watch } from "vue";
+import { useCountryArea } from "../stores/country-area";
 import { usePopulationDataStore } from "../stores/population-data";
 import { convertTo2, CountryCode3, countryNames } from "../types/countries";
 import BaseSelect from "./base-select.vue";
-import { ScalingSquaresSpinner } from "epic-spinners";
-import { useCountryArea } from "../stores/country-area";
 
 const populationDataStore = usePopulationDataStore();
 populationDataStore.fetch();

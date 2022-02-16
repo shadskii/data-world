@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import * as d3 from "d3";
-import { computed, onMounted, ref, watch } from "vue";
+import { scaleThreshold, schemeBlues } from "d3";
 import Globe, { GlobeInstance } from "globe.gl";
+import { computed, onMounted, ref, watch } from "vue";
 import { CountryCode3 } from "../types/countries";
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
@@ -40,10 +40,9 @@ const selected = computed<CountryCode3 | undefined>({
   },
 });
 
-const colorScale = d3
-  .scaleThreshold()
+const colorScale = scaleThreshold()
   .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
-  .range(d3.schemeBlues[7] as Iterable<number>);
+  .range(schemeBlues[7] as Iterable<number>);
 
 const globe = ref<GlobeInstance | undefined>();
 onMounted(async () => {
