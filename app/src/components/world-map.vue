@@ -83,7 +83,16 @@ onMounted(async () => {
         })
         .polygonLabel((c) => {
           const country = c as CountryPolygon;
-          return country === hoverCountry ? country.properties.name : "";
+          if (country.id !== hoverCountry.id) {
+            return "";
+          }
+          const pop = props.data?.[country.id]?.toLocaleString() ?? "Unknown";
+          return `
+            <div class="bg-slate-900 p-3 rounded-md">
+              <h3>${country.properties.name}</h3>
+              <p>${pop}</p>
+            </div>
+          `;
         });
     })
     .polygonsTransitionDuration(200);
