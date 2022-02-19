@@ -11,8 +11,7 @@ const props = defineProps<{
 const { selectedCountry } = toRefs(props);
 const populationDataStore = usePopulationDataStore();
 
-const { populationMap, year, loading, worldPopulation } =
-  storeToRefs(populationDataStore);
+const { populationMap } = storeToRefs(populationDataStore);
 const countryAreaStore = useCountryArea();
 countryAreaStore.fetch();
 

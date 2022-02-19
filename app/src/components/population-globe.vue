@@ -30,10 +30,6 @@ const selectedCountry = ref<CountryCode3 | undefined>();
 
 const countryAreaStore = useCountryArea();
 countryAreaStore.fetch();
-
-const countryArea = computed(() => {
-  return countryAreaStore.countryArea(selectedCountry.value!);
-});
 </script>
 <template>
   <div class="flex flex-row">
