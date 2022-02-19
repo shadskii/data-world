@@ -5,8 +5,9 @@ import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useCountryArea } from "../stores/country-area";
 import { usePopulationDataStore } from "../stores/population-data";
-import { convertTo2, CountryCode3, countryNames } from "../types/countries";
+import { CountryCode3 } from "../types/countries";
 import BaseSelect from "./base-select.vue";
+import InspectionPane from "./inspection-pane.vue";
 
 const populationDataStore = usePopulationDataStore();
 populationDataStore.fetch();
@@ -36,33 +37,7 @@ const countryArea = computed(() => {
 </script>
 <template>
   <div class="flex flex-row">
-    <div class="w-96 inline-block bg-gray-900 h-screen text-white">
-      <div class="bg-gray-800 p-2 flex flex-row justify-between">
-        <h1 class="text-2xl">World Population</h1>
-      </div>
-      <div class="text-left p-2" v-if="selectedCountry && populationMap">
-        <div class="h-48 mb-2">
-          <img
-            :alt="`${selectedCountry} flag`"
-            :src="`https://countryflagsapi.com/svg/${selectedCountry}`"
-            class="h-48"
-          />
-        </div>
-        <hr />
-        <h2 class="text-4xl mt-2">
-          {{ countryNames[selectedCountry] }}
-        </h2>
-        <h3 class="text-xl mt-3">
-          <span>
-            {{ populationMap[selectedCountry!]?.toLocaleString() }}
-          </span>
-          <span class="text-sm"> people </span>
-        </h3>
-        <div>
-          {{ `${countryArea.toLocaleString()} km²` }}
-        </div>
-      </div>
-    </div>
+    <InspectionPane :selected-country="selectedCountry" />
     <div class="map bg-gray-900 relative">
       <div class="absolute top-0 right-0 text-white z-10 p-3" v-if="loading">
         <scaling-squares-spinner
