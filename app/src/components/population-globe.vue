@@ -26,10 +26,6 @@ watch(year, () => {
 });
 
 const selectedCountry = ref<CountryCode3 | undefined>();
-const selectedCountry2 = computed(() => {
-  if (!selectedCountry.value) return undefined;
-  return convertTo2(selectedCountry.value);
-});
 
 const countryAreaStore = useCountryArea();
 countryAreaStore.fetch();
@@ -45,10 +41,14 @@ const countryArea = computed(() => {
         <h1 class="text-2xl">World Population</h1>
       </div>
       <div class="text-left p-2" v-if="selectedCountry && populationMap">
-        <img
-          :src="`https://countryflagsapi.com/svg/${selectedCountry}`"
-          class="h-48"
-        />
+        <div class="h-48 mb-2">
+          <img
+            :alt="`${selectedCountry} flag`"
+            :src="`https://countryflagsapi.com/svg/${selectedCountry}`"
+            class="h-48"
+          />
+        </div>
+        <hr />
         <h2 class="text-4xl mt-2">
           {{ countryNames[selectedCountry] }}
         </h2>
