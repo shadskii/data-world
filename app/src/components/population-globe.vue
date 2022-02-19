@@ -18,13 +18,8 @@ const years = computed(() => {
     .map((x, i) => x + i);
 });
 
-const {
-  populationMap,
-  populationMapCountryCode3,
-  year,
-  loading,
-  worldPopulation,
-} = storeToRefs(populationDataStore);
+const { populationMap, year, loading, worldPopulation } =
+  storeToRefs(populationDataStore);
 
 watch(year, () => {
   populationDataStore.fetch();
@@ -40,7 +35,7 @@ const countryAreaStore = useCountryArea();
 countryAreaStore.fetch();
 
 const countryArea = computed(() => {
-  return countryAreaStore.countryArea(selectedCountry2.value!);
+  return countryAreaStore.countryArea(selectedCountry.value!);
 });
 </script>
 <template>
@@ -59,7 +54,7 @@ const countryArea = computed(() => {
         </h2>
         <h3 class="text-xl mt-3">
           <span>
-            {{ populationMap[selectedCountry2!]?.toLocaleString() }}
+            {{ populationMap[selectedCountry!]?.toLocaleString() }}
           </span>
           <span class="text-sm"> people </span>
         </h3>
@@ -83,9 +78,9 @@ const countryArea = computed(() => {
         </div>
       </div>
       <WorldMap
-        v-if="populationMapCountryCode3"
+        v-if="populationMap"
         v-model="selectedCountry"
-        :data="populationMapCountryCode3"
+        :data="populationMap"
       />
     </div>
   </div>

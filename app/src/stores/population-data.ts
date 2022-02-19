@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { cubejsApi } from "../api";
 import { convertTo3, CountryCode2, CountryCode3 } from "../types/countries";
+import { byFips } from "country-code-lookup";
 
 export const usePopulationDataStore = defineStore("population-data", {
   state: () => ({
@@ -8,22 +9,9 @@ export const usePopulationDataStore = defineStore("population-data", {
     maxYear: 2050,
     year: 1993,
     loading: false,
-    populationMap: {} as Record<CountryCode2, number>,
+    populationMap: {} as Record<CountryCode3, number>,
   }),
   getters: {
-    /**
-     * Returns the population of a given country by its 3 letter code.
-     */
-    populationMapCountryCode3(state) {
-      const { populationMap } = state;
-      if (!populationMap) return {};
-      return Object.fromEntries(
-        Object.entries(populationMap).map(([countryCode, value]) => {
-          const countryCode3 = convertTo3(countryCode as CountryCode2);
-          return [countryCode3, value];
-        })
-      );
-    },
     /**
      * Total population of all countries.
      */
@@ -42,8 +30,11 @@ export const usePopulationDataStore = defineStore("population-data", {
 
       const cubeData = await cubejsApi.load({
         filters: [],
-        dimensions: ["PredictedPopulation.country"],
-        measures: ["PredictedPopulation.population"],
+        dimensions: [
+          "PredictedPopulation.country",
+          "PredictedPopulation.population",
+        ],
+        measures: [],
         timeDimensions: [
           {
             dimension: "PredictedPopulation.year",
@@ -54,10 +45,9 @@ export const usePopulationDataStore = defineStore("population-data", {
       });
       this.populationMap = Object.fromEntries(
         cubeData.tablePivot().map((row) => {
-          return [
-            row["PredictedPopulation.country"],
-            row[`PredictedPopulation.population`],
-          ];
+          const countryCodeFips = row["PredictedPopulation.country"] as string;
+          const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
+          return [countryCodeIso3, row[`PredictedPopulation.population`]];
         })
       );
 

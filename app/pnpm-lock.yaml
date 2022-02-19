@@ -10,6 +10,7 @@ specifiers:
   autoprefixer: ^10.4.2
   chart.js: ^3.7.0
   chartkick: ^4.1.1
+  country-code-lookup: ^0.0.20
   d3: ^7.3.0
   epic-spinners: ^1.1.0
   globe.gl: ^2.24.4
@@ -28,6 +29,7 @@ dependencies:
   '@cubejs-client/vue': 0.29.23_vue@3.2.29
   chart.js: 3.7.0
   chartkick: 4.1.1
+  country-code-lookup: 0.0.20
   d3: 7.3.0
   epic-spinners: 1.1.0_vue@3.2.29
   globe.gl: 2.24.4
@@ -760,6 +762,10 @@ packages:
       path-type: 4.0.0
       yaml: 1.10.2
     dev: true
+
+  /country-code-lookup/0.0.20:
+    resolution: {integrity: sha512-mcNlekdiVyiKO0lrjj3FrZ36vxlwjUwXTHpdRtVu9917SAYsHrlORmpHdPXeEXwTmw/yiKiTX4t6LC5uP5KVFg==}
+    dev: false
 
   /cross-fetch/3.1.5:
     resolution: {integrity: sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==}

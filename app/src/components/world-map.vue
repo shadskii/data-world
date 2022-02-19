@@ -89,7 +89,7 @@ onMounted(async () => {
           const pop = props.data?.[country.id]?.toLocaleString() ?? "Unknown";
           return `
             <div class="bg-slate-900 p-3 rounded-md">
-              <h3>${country.properties.name}</h3>
+              <h3>${country.properties.name} (${country.id})</h3>
               <p>${pop}</p>
             </div>
           `;

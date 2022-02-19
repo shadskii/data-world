@@ -11,6 +11,7 @@
     "@cubejs-client/vue": "^0.29.23",
     "chart.js": "^3.7.0",
     "chartkick": "^4.1.1",
+    "country-code-lookup": "^0.0.20",
     "d3": "^7.3.0",
     "epic-spinners": "^1.1.0",
     "globe.gl": "^2.24.4",
