@@ -18,8 +18,13 @@ const years = computed(() => {
     .map((x, i) => x + i);
 });
 
-const { populationMap, populationMapCountryCode3, year, loading } =
-  storeToRefs(populationDataStore);
+const {
+  populationMap,
+  populationMapCountryCode3,
+  year,
+  loading,
+  worldPopulation,
+} = storeToRefs(populationDataStore);
 
 watch(year, () => {
   populationDataStore.fetch();
@@ -73,6 +78,9 @@ const countryArea = computed(() => {
       </div>
       <div class="absolute z-10 p-2">
         <BaseSelect :values="years" v-model="year" />
+        <div class="text-white pt-2">
+          {{ worldPopulation.toLocaleString() }} total people
+        </div>
       </div>
       <WorldMap
         v-if="populationMapCountryCode3"

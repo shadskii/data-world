@@ -11,6 +11,9 @@ export const usePopulationDataStore = defineStore("population-data", {
     populationMap: {} as Record<CountryCode2, number>,
   }),
   getters: {
+    /**
+     * Returns the population of a given country by its 3 letter code.
+     */
     populationMapCountryCode3(state) {
       const { populationMap } = state;
       if (!populationMap) return {};
@@ -19,6 +22,17 @@ export const usePopulationDataStore = defineStore("population-data", {
           const countryCode3 = convertTo3(countryCode as CountryCode2);
           return [countryCode3, value];
         })
+      );
+    },
+    /**
+     * Total population of all countries.
+     */
+    worldPopulation(state) {
+      const { populationMap } = state;
+      if (!populationMap) return 0;
+      return Object.values(populationMap).reduce(
+        (acc, value) => acc + value,
+        0
       );
     },
   },
