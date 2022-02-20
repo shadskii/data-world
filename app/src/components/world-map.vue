@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useResizeObserver } from "@vueuse/core";
 import { scaleThreshold, schemeBlues } from "d3";
 import Globe, { GlobeInstance } from "globe.gl";
 import { computed, onMounted, ref, watch } from "vue";
 import { CountryCode3 } from "../types/countries";
+
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
 const raised = 0.06;
@@ -45,6 +47,7 @@ const colorScale = scaleThreshold()
   .range(schemeBlues[7] as Iterable<number>);
 
 const globe = ref<GlobeInstance | undefined>();
+
 onMounted(async () => {
   const response = await fetch(
     "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
@@ -97,6 +100,15 @@ onMounted(async () => {
     })
     .polygonsTransitionDuration(200);
 });
+
+useResizeObserver(container, (entries) => {
+  const entry = entries[0];
+  const { width, height } = entry.contentRect;
+  if (globe.value) {
+    globe.value.width(width).height(height);
+  }
+});
+
 watch(
   props,
   (d) => {

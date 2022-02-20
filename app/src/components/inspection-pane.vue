@@ -50,7 +50,7 @@ const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
         {{ `${countryArea.toLocaleString()} km²` }}
       </div>
       <section class="my-2">
-        <h2 class="pb-2 text-lg font-bold">Population</h2>
+        <h2 class="text-lg font-bold">Population</h2>
         <span>
           {{ populationMap[selectedCountry!]?.toLocaleString() }}
         </span>

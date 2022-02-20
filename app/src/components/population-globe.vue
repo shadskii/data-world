@@ -52,6 +52,7 @@ countryAreaStore.fetch();
         v-if="populationMap"
         v-model="selectedCountry"
         :data="populationMap"
+        class="w-full h-full"
       />
     </div>
   </div>
