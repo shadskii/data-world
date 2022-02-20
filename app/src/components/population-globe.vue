@@ -2,38 +2,37 @@
 import WorldMap from "@/components/world-map.vue";
 import { ScalingSquaresSpinner } from "epic-spinners";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed } from "vue";
 import { useCountryArea } from "../stores/country-area";
 import { usePopulationDataStore } from "../stores/population-data";
-import { CountryCode3 } from "../types/countries";
+import {
+  MAX_YEAR,
+  MIN_YEAR,
+  usePopulationParams,
+} from "../stores/population-params";
 import BaseSelect from "./base-select.vue";
 import InspectionPane from "./inspection-pane.vue";
 
 const populationDataStore = usePopulationDataStore();
-populationDataStore.fetch();
 
 const years = computed(() => {
-  const { minYear, maxYear } = populationDataStore;
-  return Array(maxYear - minYear)
-    .fill(minYear)
+  return Array(MAX_YEAR - MIN_YEAR)
+    .fill(MIN_YEAR)
     .map((x, i) => x + i);
 });
 
-const { populationMap, year, loading, worldPopulation } =
+const populationParams = usePopulationParams();
+const { selectedCountry, year } = storeToRefs(populationParams);
+
+const { populationMap, loading, worldPopulation } =
   storeToRefs(populationDataStore);
-
-watch(year, () => {
-  populationDataStore.fetch();
-});
-
-const selectedCountry = ref<CountryCode3 | undefined>();
 
 const countryAreaStore = useCountryArea();
 countryAreaStore.fetch();
 </script>
 <template>
   <div class="flex flex-row">
-    <InspectionPane :selected-country="selectedCountry" />
+    <InspectionPane :selected-country="selectedCountry!" />
     <div class="map bg-gray-900 relative">
       <div class="absolute top-0 right-0 text-white z-10 p-3" v-if="loading">
         <scaling-squares-spinner

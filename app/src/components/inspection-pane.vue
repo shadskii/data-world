@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { ScalingSquaresSpinner } from "epic-spinners";
 import { storeToRefs } from "pinia";
-import { computed, ref, toRefs, watch } from "vue";
+import { computed, toRefs } from "vue";
 import { useCountryArea } from "../stores/country-area";
 import { useDetailedPopulationDataStore } from "../stores/detailed-population-data";
 import { usePopulationDataStore } from "../stores/population-data";
 import { CountryCode3, countryNames } from "../types/countries";
-import { ScalingSquaresSpinner } from "epic-spinners";
 
 const props = defineProps<{
   selectedCountry: CountryCode3 | undefined;
@@ -22,11 +22,6 @@ const countryArea = computed(() => {
 });
 
 const detailedPopulationStore = useDetailedPopulationDataStore();
-
-watch(selectedCountry, () => {
-  detailedPopulationStore.country = selectedCountry.value;
-  detailedPopulationStore.fetch();
-});
 const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
 </script>
 <template>
