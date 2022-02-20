@@ -2,6 +2,7 @@
 import { ScalingSquaresSpinner } from "epic-spinners";
 import { storeToRefs } from "pinia";
 import { computed, toRefs } from "vue";
+import { formatOrdinal } from "../formatting/number-formatting";
 import { useCountryArea } from "../stores/country-area";
 import { useDetailedPopulationDataStore } from "../stores/detailed-population-data";
 import { usePopulationDataStore } from "../stores/population-data";
@@ -13,7 +14,7 @@ const props = defineProps<{
 const { selectedCountry } = toRefs(props);
 const populationDataStore = usePopulationDataStore();
 
-const { populationMap } = storeToRefs(populationDataStore);
+const { populationMap, populationRanks } = storeToRefs(populationDataStore);
 const countryAreaStore = useCountryArea();
 countryAreaStore.fetch();
 
@@ -46,8 +47,11 @@ const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
       </div>
       <section class="my-2">
         <h2 class="text-lg font-bold">Population</h2>
-        <span>
+        <span class="">
           {{ populationMap[selectedCountry!]?.toLocaleString() }}
+          <span class="ordinal text-sm pl-1">
+            {{ formatOrdinal(populationRanks[selectedCountry!]) }}
+          </span>
         </span>
         <div
           class="flex justify-center items-center h-80 rounded-sm border-2 border-slate-700"

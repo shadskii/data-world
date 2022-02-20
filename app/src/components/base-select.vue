@@ -25,8 +25,9 @@ const innerValue = computed<number>({
       :key="number"
       :class="{
         'bg-green-800': number === innerValue,
+        'bg-gray-800': number !== innerValue,
       }"
-      class="text-white rounded-full border-2 text-xs px-2 py-1 mr-0.5 mb-0.5 bg-slate-700 border-slate-900"
+      class="text-white rounded-full border-2 text-xs px-2 py-1 mr-0.5 mb-0.5 border-slate-900"
       @click="innerValue = number"
     >
       {{ number }}

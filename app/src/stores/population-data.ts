@@ -1,4 +1,4 @@
-import { byFips } from "country-code-lookup";
+import { byFips, byIso } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { cubejsApi } from "../api";
@@ -49,9 +49,24 @@ export const usePopulationDataStore = defineStore("population-data", () => {
   }
   watch(year, fetchData, { immediate: true });
 
+  /**
+   * Population ranks for each country for the given year.
+   */
+  const populationRanks = computed(() => {
+    if (!populationMap.value) return {} as Record<CountryCode3, number>;
+    return Object.fromEntries(
+      Object.entries(populationMap.value)
+        .sort((a, b) => b[1] - a[1])
+        .map(([iso3], index) => {
+          return [iso3, index + 1];
+        })
+    );
+  });
+
   return {
     populationMap,
     loading,
     worldPopulation,
+    populationRanks,
   };
 });
