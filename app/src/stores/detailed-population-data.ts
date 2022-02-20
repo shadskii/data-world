@@ -52,7 +52,6 @@ export const useDetailedPopulationDataStore = defineStore(
             ];
           })
         );
-        console.table(this.populationDetails);
         this.loading = false;
       },
     },
