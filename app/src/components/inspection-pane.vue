@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { computed, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { useCountryArea } from "../stores/country-area";
+import { useDetailedPopulationDataStore } from "../stores/detailed-population-data";
 import { usePopulationDataStore } from "../stores/population-data";
 import { CountryCode3, countryNames } from "../types/countries";
+import { ScalingSquaresSpinner } from "epic-spinners";
 
 const props = defineProps<{
   selectedCountry: CountryCode3 | undefined;
@@ -18,6 +20,14 @@ countryAreaStore.fetch();
 const countryArea = computed(() => {
   return countryAreaStore.countryArea(selectedCountry.value!);
 });
+
+const detailedPopulationStore = useDetailedPopulationDataStore();
+
+watch(selectedCountry, () => {
+  detailedPopulationStore.country = selectedCountry.value;
+  detailedPopulationStore.fetch();
+});
+const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
 </script>
 <template>
   <div class="w-96 inline-block bg-gray-900 h-screen text-white">
@@ -33,18 +43,35 @@ const countryArea = computed(() => {
         />
       </div>
       <hr />
-      <h2 class="text-4xl mt-2">
+      <h2 class="text-2xl mt-2 font-bold">
         {{ countryNames[selectedCountry] }}
       </h2>
-      <h3 class="text-xl mt-3">
-        <span>
-          {{ populationMap[selectedCountry!]?.toLocaleString() }}
-        </span>
-        <span class="text-sm"> people </span>
-      </h3>
       <div>
         {{ `${countryArea.toLocaleString()} km²` }}
       </div>
+      <section class="my-2">
+        <h2 class="pb-2 text-lg font-bold">Population</h2>
+        <span>
+          {{ populationMap[selectedCountry!]?.toLocaleString() }}
+        </span>
+        <div
+          class="flex justify-center items-center h-80 rounded-sm border-2 border-slate-700"
+        >
+          <scaling-squares-spinner
+            v-if="loading"
+            :animation-duration="1250"
+            :size="30"
+            color="#fff"
+          />
+          <column-chart
+            v-else
+            :data="populationDetails"
+            label="population"
+            xtitle="Population"
+            ytitle="age"
+          />
+        </div>
+      </section>
     </div>
   </div>
 </template>
