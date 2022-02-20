@@ -1,6 +1,7 @@
+import { Query } from "@cubejs-client/core";
 import { byFips, byIso } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { cubejsApi } from "../api";
 import { CountryCode3 } from "../types/countries";
 import { usePopulationParams } from "./population-params";
@@ -17,12 +18,11 @@ export const useDetailedPopulationDataStore = defineStore(
     const sex = ref<Sex>("Male");
     const populationDetails = ref<[CountryCode3, number][]>([]);
 
-    async function fetchData() {
-      if (!selectedCountry.value) return;
+    const query = computed<Query>(() => {
+      if (!selectedCountry.value) return {};
 
-      loading.value = true;
-      const countryFips = byIso(selectedCountry.value)?.fips;
-      const cubeData = await cubejsApi.load({
+      const countryFips = byIso(selectedCountry.value!)?.fips;
+      return {
         filters: [
           {
             member: "DetailedPopulation.country",
@@ -39,7 +39,11 @@ export const useDetailedPopulationDataStore = defineStore(
             dateRange: [`${year.value}`, `${year.value}`],
           },
         ],
-      });
+      };
+    });
+    async function fetchData() {
+      loading.value = true;
+      const cubeData = await cubejsApi.load(query.value);
 
       populationDetails.value = cubeData.tablePivot().map((row) => {
         return [
@@ -49,11 +53,13 @@ export const useDetailedPopulationDataStore = defineStore(
       });
       loading.value = false;
     }
-    watch([year, selectedCountry], ([year, selectedCountry]) => {
-      if (selectedCountry && year) {
+
+    watch(query, () => {
+      if (selectedCountry.value && year.value) {
         fetchData();
       }
     });
+
     return {
       loading,
       sex,
