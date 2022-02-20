@@ -16,7 +16,7 @@ import InspectionPane from "./inspection-pane.vue";
 const populationDataStore = usePopulationDataStore();
 
 const years = computed(() => {
-  return Array(MAX_YEAR - MIN_YEAR)
+  return Array(MAX_YEAR - MIN_YEAR + 1)
     .fill(MIN_YEAR)
     .map((x, i) => x + i);
 });

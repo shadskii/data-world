@@ -18,12 +18,18 @@ const innerValue = computed<number>({
 });
 </script>
 <template>
-  <select
-    class="bg-gray-800 w-24 px-2 py-1 text-white rounded text-center"
-    v-model="innerValue"
-  >
-    <option v-for="number in values" :value="number" :key="number">
+  <div class="flex flex-wrap">
+    <button
+      v-for="(number, index) in values"
+      :value="number"
+      :key="number"
+      :class="{
+        'bg-green-800': number === innerValue,
+      }"
+      class="text-white rounded-full border-2 text-xs px-2 py-1 mr-0.5 mb-0.5 bg-slate-700 border-slate-900"
+      @click="innerValue = number"
+    >
       {{ number }}
-    </option>
-  </select>
+    </button>
+  </div>
 </template>
