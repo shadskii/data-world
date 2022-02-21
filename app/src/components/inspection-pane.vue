@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ScalingSquaresSpinner } from "epic-spinners";
 import { storeToRefs } from "pinia";
-import { computed, toRefs } from "vue";
+import { computed, reactive, toRefs } from "vue";
 import { formatOrdinal } from "../formatting/number-formatting";
 import { useCountryArea } from "../stores/country-area";
 import { useDetailedPopulationDataStore } from "../stores/detailed-population-data";
 import { usePopulationDataStore } from "../stores/population-data";
 import { CountryCode3, countryNames } from "../types/countries";
+import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps<{
   selectedCountry: CountryCode3 | undefined;
@@ -25,6 +26,54 @@ const countryArea = computed(() => {
 
 const detailedPopulationStore = useDetailedPopulationDataStore();
 const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
+
+const series = computed(() => {
+  return [
+    {
+      name: "Population",
+      data: populationDetails.value,
+    },
+  ];
+});
+
+const chartOptions = computed(() => {
+  return {
+    chart: {
+      type: "area",
+      height: 350,
+      zoom: {
+        enabled: false,
+      },
+      background: "transparent",
+      toolbar: {
+        show: false,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+
+    title: {
+      text: "Population by age",
+      align: "left",
+    },
+
+    xaxis: {
+      type: "numeric",
+      min: 0,
+      max: 100,
+    },
+    yaxis: {
+      show: false,
+    },
+    legend: {
+      horizontalAlign: "left",
+    },
+    theme: {
+      mode: "dark",
+    },
+  };
+});
 </script>
 <template>
   <div class="w-96 inline-block bg-gray-900 h-screen text-white">
@@ -57,22 +106,23 @@ const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
             - {{ formatOrdinal(populationRanks[selectedCountry!]) }}
           </span>
         </span>
-        <div
-          class="flex justify-center items-center h-80 rounded-sm border-2 border-slate-700"
-        >
-          <scaling-squares-spinner
+        <div class="relative h-90 mt-2 border-slate-700 border-2 rounded-md">
+          <div
             v-if="loading"
-            :animation-duration="1250"
-            :size="30"
-            color="#fff"
-          />
-          <column-chart
-            v-else
-            :data="populationDetails"
-            label="population"
-            xtitle="Population"
-            ytitle="age"
-          />
+            class="absolute top-1/2 left-1/2 bottom-1/2 right-1/2 z-10"
+          >
+            <scaling-squares-spinner
+              :animation-duration="1250"
+              :size="30"
+              color="#fff"
+            />
+          </div>
+          <VueApexCharts
+            type="area"
+            height="350"
+            :options="chartOptions"
+            :series="series"
+          ></VueApexCharts>
         </div>
       </section>
     </div>

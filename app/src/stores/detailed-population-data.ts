@@ -16,7 +16,7 @@ export const useDetailedPopulationDataStore = defineStore(
 
     const loading = ref(false);
     const sex = ref<Sex>("Male");
-    const populationDetails = ref<[CountryCode3, number][]>([]);
+    const populationDetails = ref<[number, number][]>([]);
 
     const query = computed<Query>(() => {
       if (!selectedCountry.value) return {};
@@ -28,6 +28,11 @@ export const useDetailedPopulationDataStore = defineStore(
             member: "DetailedPopulation.country",
             operator: "equals",
             values: [countryFips!],
+          },
+          {
+            member: "DetailedPopulation.sex",
+            operator: "equals",
+            values: [sex.value],
           },
         ],
         dimensions: ["DetailedPopulation.age", "DetailedPopulation.population"],
@@ -43,14 +48,19 @@ export const useDetailedPopulationDataStore = defineStore(
     });
     async function fetchData() {
       loading.value = true;
+      populationDetails.value = [];
       const cubeData = await cubejsApi.load(query.value);
 
-      populationDetails.value = cubeData.tablePivot().map((row) => {
-        return [
-          row["DetailedPopulation.age"] as CountryCode3,
-          row[`DetailedPopulation.population`] as number,
-        ];
-      });
+      populationDetails.value = cubeData
+        .tablePivot()
+        .map((row) => {
+          return {
+            age: row["DetailedPopulation.age"] as number,
+            pop: row[`DetailedPopulation.population`] as number,
+          };
+        })
+        .sort((a, b) => a.age - b.age)
+        .map((row) => [row.age, row.pop]);
       loading.value = false;
     }
 
