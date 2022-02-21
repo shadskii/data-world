@@ -4,6 +4,7 @@ import { scaleThreshold, schemeBlues } from "d3";
 import Globe, { GlobeInstance } from "globe.gl";
 import { computed, onMounted, ref, watch } from "vue";
 import { CountryCode3 } from "../types/countries";
+import { ScalingSquaresSpinner } from "epic-spinners";
 
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
@@ -14,6 +15,10 @@ const polygonSideColorHighlight = "#a00000";
 const props = defineProps<{
   modelValue: CountryCode3 | undefined;
   data: Record<CountryCode3, number>;
+  /**
+   * Put globe into loading state.
+   */
+  loading: boolean;
 }>();
 
 interface CountryPolygon {
@@ -140,5 +145,17 @@ watch(selected, (code) => {
 });
 </script>
 <template>
-  <div ref="container"></div>
+  <div class="relative">
+    <div ref="container" class="h-screen w-full"></div>
+    <div
+      v-if="loading"
+      class="absolute top-0 bottom-0 right-0 left-0 flex flex-row justify-center items-center pointer-events-none"
+    >
+      <scaling-squares-spinner
+        :animation-duration="1250"
+        :size="30"
+        color="#fff"
+      />
+    </div>
+  </div>
 </template>

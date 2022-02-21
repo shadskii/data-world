@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import WorldMap from "@/components/world-map.vue";
-import { ScalingSquaresSpinner } from "epic-spinners";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useCountryArea } from "../stores/country-area";
@@ -34,13 +33,6 @@ countryAreaStore.fetch();
   <div class="flex flex-row">
     <InspectionPane :selected-country="selectedCountry!" />
     <div class="map bg-gray-900 relative">
-      <div class="absolute top-0 right-0 text-white z-10 p-3" v-if="loading">
-        <scaling-squares-spinner
-          :animation-duration="1250"
-          :size="30"
-          color="#fff"
-        />
-      </div>
       <div class="absolute z-10 p-2">
         <BaseSelect :values="years" v-model="year" />
         <div class="text-white pt-2">
@@ -52,6 +44,7 @@ countryAreaStore.fetch();
         v-model="selectedCountry"
         :data="populationMap"
         class="w-full h-full"
+        :loading="loading"
       />
     </div>
   </div>
