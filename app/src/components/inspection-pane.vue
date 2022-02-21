@@ -16,6 +16,7 @@ const populationDataStore = usePopulationDataStore();
 
 const { populationMap, populationRanks } = storeToRefs(populationDataStore);
 const countryAreaStore = useCountryArea();
+const { countryAreaRanks } = storeToRefs(countryAreaStore);
 countryAreaStore.fetch();
 
 const countryArea = computed(() => {
@@ -44,13 +45,16 @@ const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
       </h2>
       <div>
         {{ `${countryArea.toLocaleString()} km²` }}
+        <span class="ordinal text-sm pl-1">
+          - {{ formatOrdinal(countryAreaRanks[selectedCountry!]) }}
+        </span>
       </div>
       <section class="my-2">
         <h2 class="text-lg font-bold">Population</h2>
         <span class="">
           {{ populationMap[selectedCountry!]?.toLocaleString() }}
           <span class="ordinal text-sm pl-1">
-            {{ formatOrdinal(populationRanks[selectedCountry!]) }}
+            - {{ formatOrdinal(populationRanks[selectedCountry!]) }}
           </span>
         </span>
         <div

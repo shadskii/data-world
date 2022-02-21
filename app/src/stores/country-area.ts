@@ -11,6 +11,17 @@ export const useCountryArea = defineStore("country-area", {
   getters: {
     countryArea: (state) => (countryCode3: CountryCode3) =>
       state.areaMap?.[countryCode3] ?? 0,
+
+    /**
+     * Rank countries by area size.
+     */
+    countryAreaRanks: (state) => {
+      return Object.fromEntries(
+        Object.entries(state.areaMap)
+          .sort((a, b) => b[1] - a[1])
+          .map(([countryCode3], index) => [countryCode3, index + 1])
+      );
+    },
   },
   actions: {
     async fetch() {
