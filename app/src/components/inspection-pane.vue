@@ -76,7 +76,9 @@ const chartOptions = computed(() => {
 });
 </script>
 <template>
-  <div class="w-96 inline-block bg-gray-900 h-screen text-white">
+  <div
+    class="w-96 inline-block bg-gray-900 h-screen text-white overflow-y-auto"
+  >
     <div class="bg-gray-800 p-2 flex flex-row justify-between">
       <h1 class="text-2xl">World Population</h1>
     </div>
