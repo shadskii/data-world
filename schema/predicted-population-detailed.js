@@ -1,5 +1,8 @@
 cube(`DetailedPopulation`, {
-  sql: ` SELECT * FROM \`bigquery-public-data.census_bureau_international.midyear_population_agespecific\``,
+  sql: /*sql*/ `
+  SELECT * 
+  FROM bigquery-public-data.census_bureau_international.midyear_population_agespecific
+  `,
 
   preAggregations: {
     // Pre-Aggregations definitions go here
@@ -9,8 +12,13 @@ cube(`DetailedPopulation`, {
   measures: {},
 
   dimensions: {
+    key: {
+      sql: `CONCAT(${DetailedPopulation}.country_code, '-', ${DetailedPopulation}.year)`,
+      type: "string",
+      primaryKey: true,
+    },
     population: {
-      sql: `population`,
+      sql: `${DetailedPopulation}.population`,
       type: "number",
     },
     sex: {
@@ -26,8 +34,17 @@ cube(`DetailedPopulation`, {
       type: "string",
     },
     year: {
-      sql: `PARSE_TIMESTAMP("%Y", CAST(year AS STRING))`,
+      sql: /*sql*/ `PARSE_TIMESTAMP("%Y", CAST(${DetailedPopulation}.year AS STRING))`,
       type: "time",
+    },
+  },
+  joins: {
+    PredictedPopulation: {
+      relationship: "hasOne",
+      sql: /*sql*/ `
+        ${PredictedPopulation}.country_code = ${DetailedPopulation}.country_code
+        AND ${PredictedPopulation}.year = ${DetailedPopulation}.year
+      `,
     },
   },
 });

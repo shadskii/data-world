@@ -14,8 +14,8 @@ cube(`PredictedPopulation`, {
   },
 
   dimensions: {
-    population: {
-      sql: `midyear_population`,
+    totalPopulation: {
+      sql: `${PredictedPopulation}.midyear_population`,
       type: "number",
     },
     country: {
@@ -23,7 +23,7 @@ cube(`PredictedPopulation`, {
       type: "string",
     },
     year: {
-      sql: `PARSE_TIMESTAMP("%Y", CAST(year AS STRING))`,
+      sql: `PARSE_TIMESTAMP("%Y", CAST(${PredictedPopulation}.year AS STRING))`,
       type: "time",
     },
   },

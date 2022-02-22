@@ -26,7 +26,7 @@ export const usePopulationDataStore = defineStore("population-data", () => {
       filters: [],
       dimensions: [
         "PredictedPopulation.country",
-        "PredictedPopulation.population",
+        "PredictedPopulation.totalPopulation",
       ],
       measures: [],
       timeDimensions: [
@@ -41,7 +41,7 @@ export const usePopulationDataStore = defineStore("population-data", () => {
       cubeData.tablePivot().map((row) => {
         const countryCodeFips = row["PredictedPopulation.country"] as string;
         const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
-        return [countryCodeIso3, row[`PredictedPopulation.population`]];
+        return [countryCodeIso3, row[`PredictedPopulation.totalPopulation`]];
       })
     );
 

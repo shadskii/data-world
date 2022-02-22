@@ -36,7 +36,6 @@ export const useDetailedPopulationDataStore = defineStore(
           },
         ],
         dimensions: ["DetailedPopulation.age", "DetailedPopulation.population"],
-        measures: [],
         timeDimensions: [
           {
             dimension: "DetailedPopulation.year",
@@ -56,7 +55,7 @@ export const useDetailedPopulationDataStore = defineStore(
         .map((row) => {
           return {
             age: row["DetailedPopulation.age"] as number,
-            pop: row[`DetailedPopulation.population`] as number,
+            pop: row["DetailedPopulation.population"] as number,
           };
         })
         .sort((a, b) => a.age - b.age)
