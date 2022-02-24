@@ -16,7 +16,14 @@ export const useDetailedPopulationDataStore = defineStore(
 
     const loading = ref(false);
     const sex = ref<Sex>("Male");
-    const populationDetails = ref<[number, number][]>([]);
+    /**
+     * male population for country by age.
+     */
+    const malePopulation = ref<[number, number][]>([]);
+    /**
+     * female population for country by age.
+     */
+    const femalePopulation = ref<[number, number][]>([]);
 
     const query = computed<Query>(() => {
       if (!selectedCountry.value) return {};
@@ -29,13 +36,12 @@ export const useDetailedPopulationDataStore = defineStore(
             operator: "equals",
             values: [countryFips!],
           },
-          {
-            member: "DetailedPopulation.sex",
-            operator: "equals",
-            values: [sex.value],
-          },
         ],
-        dimensions: ["DetailedPopulation.age", "DetailedPopulation.population"],
+        dimensions: [
+          "DetailedPopulation.age",
+          "DetailedPopulation.population",
+          "DetailedPopulation.sex",
+        ],
         timeDimensions: [
           {
             dimension: "DetailedPopulation.year",
@@ -47,19 +53,33 @@ export const useDetailedPopulationDataStore = defineStore(
     });
     async function fetchData() {
       loading.value = true;
-      populationDetails.value = [];
-      const cubeData = await cubejsApi.load(query.value);
 
-      populationDetails.value = cubeData
+      malePopulation.value = [];
+      femalePopulation.value = [];
+
+      const cubeData = await cubejsApi.load(query.value);
+      const data = cubeData
         .tablePivot()
         .map((row) => {
           return {
             age: row["DetailedPopulation.age"] as number,
             pop: row["DetailedPopulation.population"] as number,
+            sex: row["DetailedPopulation.sex"] as Sex,
           };
         })
-        .sort((a, b) => a.age - b.age)
+        .sort((a, b) => a.age - b.age);
+
+      malePopulation.value = data
+        .filter((d) => {
+          return d.sex === "Male";
+        })
         .map((row) => [row.age, row.pop]);
+      femalePopulation.value = data
+        .filter((d) => {
+          return d.sex === "Female";
+        })
+        .map((row) => [row.age, row.pop]);
+
       loading.value = false;
     }
 
@@ -72,7 +92,8 @@ export const useDetailedPopulationDataStore = defineStore(
     return {
       loading,
       sex,
-      populationDetails,
+      malePopulation,
+      femalePopulation,
     };
   }
 );

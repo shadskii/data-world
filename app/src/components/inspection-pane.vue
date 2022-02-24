@@ -25,13 +25,21 @@ const countryArea = computed(() => {
 });
 
 const detailedPopulationStore = useDetailedPopulationDataStore();
-const { populationDetails, loading } = storeToRefs(detailedPopulationStore);
+const { femalePopulation, malePopulation, loading } = storeToRefs(
+  detailedPopulationStore
+);
 
 const series = computed(() => {
   return [
     {
-      name: "Population",
-      data: populationDetails.value,
+      name: "Male",
+      data: malePopulation.value,
+      color: "#2da9d8",
+    },
+    {
+      name: "Female",
+      data: femalePopulation.value,
+      color: "#b73377",
     },
   ];
 });
