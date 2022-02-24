@@ -10,7 +10,7 @@ const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
 const raised = 0.06;
 const lowered = 0.02;
-const polygonSideColorHighlight = "#a00000";
+const polygonSideColorHighlight = "#202020";
 
 const props = defineProps<{
   modelValue: CountryCode3 | undefined;
@@ -128,7 +128,7 @@ watch(selected, (code) => {
   globe.value
     ?.polygonStrokeColor((c) => {
       const country = c as CountryPolygon;
-      return country.id === code ? polygonSideColorHighlight : "#000";
+      return country.id === code ? "#fff" : "#000";
     })
     .polygonAltitude((c) => {
       const country = c as CountryPolygon;
