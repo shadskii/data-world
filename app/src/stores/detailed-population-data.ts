@@ -25,6 +25,9 @@ export const useDetailedPopulationDataStore = defineStore(
      */
     const femalePopulation = ref<[number, number][]>([]);
 
+    const infantMortality = ref(-1);
+    const lifeExpectancy = ref(-1);
+
     const query = computed<Query>(() => {
       if (!selectedCountry.value) return {};
 
@@ -37,10 +40,13 @@ export const useDetailedPopulationDataStore = defineStore(
             values: [countryFips!],
           },
         ],
+        measures: [],
         dimensions: [
           "DetailedPopulation.age",
           "DetailedPopulation.population",
           "DetailedPopulation.sex",
+          "MortalityLifeExpectancy.infantMortality",
+          "MortalityLifeExpectancy.lifeExpectancy",
         ],
         timeDimensions: [
           {
@@ -56,6 +62,8 @@ export const useDetailedPopulationDataStore = defineStore(
 
       malePopulation.value = [];
       femalePopulation.value = [];
+      infantMortality.value = -1;
+      lifeExpectancy.value = -1;
 
       const cubeData = await cubejsApi.load(query.value);
       const data = cubeData
@@ -68,6 +76,14 @@ export const useDetailedPopulationDataStore = defineStore(
           };
         })
         .sort((a, b) => a.age - b.age);
+
+      infantMortality.value = cubeData.tablePivot().at(0)?.[
+        "MortalityLifeExpectancy.infantMortality"
+      ]! as number;
+
+      lifeExpectancy.value = cubeData.tablePivot().at(0)?.[
+        "MortalityLifeExpectancy.lifeExpectancy"
+      ]! as number;
 
       malePopulation.value = data
         .filter((d) => {
@@ -94,6 +110,8 @@ export const useDetailedPopulationDataStore = defineStore(
       sex,
       malePopulation,
       femalePopulation,
+      infantMortality,
+      lifeExpectancy,
     };
   }
 );

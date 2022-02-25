@@ -46,5 +46,12 @@ cube(`DetailedPopulation`, {
         AND ${PredictedPopulation}.year = ${DetailedPopulation}.year
       `,
     },
+    MortalityLifeExpectancy: {
+      relationship: "hasOne",
+      sql: /*sql*/ `
+        ${MortalityLifeExpectancy}.country_code = ${DetailedPopulation}.country_code
+        AND ${MortalityLifeExpectancy}.year = ${DetailedPopulation}.year
+        `,
+    },
   },
 });

@@ -25,9 +25,13 @@ const countryArea = computed(() => {
 });
 
 const detailedPopulationStore = useDetailedPopulationDataStore();
-const { femalePopulation, malePopulation, loading } = storeToRefs(
-  detailedPopulationStore
-);
+const {
+  femalePopulation,
+  malePopulation,
+  loading,
+  infantMortality,
+  lifeExpectancy,
+} = storeToRefs(detailedPopulationStore);
 
 const series = computed(() => {
   return [
@@ -133,6 +137,18 @@ const chartOptions = computed(() => {
             :options="chartOptions"
             :series="series"
           ></VueApexCharts>
+        </div>
+        <div>
+          <span>Infant Mortality</span> -
+          <span v-if="!loading">
+            {{ infantMortality ? `${infantMortality.toFixed(3)}%` : "unknown" }}
+          </span>
+        </div>
+        <div>
+          <span>Life Expectancy</span> -
+          <span v-if="!loading">
+            {{ lifeExpectancy ? `${lifeExpectancy.toFixed(2)}` : "unknown" }}
+          </span>
         </div>
       </section>
     </div>
