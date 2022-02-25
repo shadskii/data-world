@@ -33,11 +33,14 @@ countryAreaStore.fetch();
   <div class="flex flex-row">
     <InspectionPane :selected-country="selectedCountry!" />
     <div class="map bg-gray-900 relative">
-      <div class="absolute z-10 p-2">
+      <div class="text-white pt-2 absolute top-0 z-10 p-2">
+        <span class="text-2xl">
+          {{ worldPopulation.toLocaleString() }}
+        </span>
+        <span class="font-thin"> total people </span>
+      </div>
+      <div class="absolute z-10 p-2 bottom-0">
         <BaseSelect :values="years" v-model="year" />
-        <div class="text-white pt-2">
-          {{ worldPopulation.toLocaleString() }} total people
-        </div>
       </div>
       <WorldMap
         v-if="populationMap"

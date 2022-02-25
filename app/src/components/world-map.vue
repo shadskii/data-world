@@ -48,8 +48,11 @@ const selected = computed<CountryCode3 | undefined>({
 });
 
 const colorScale = scaleThreshold()
-  .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
-  .range(schemeBlues[7] as Iterable<number>);
+  .domain([
+    100000, 1000000, 10000000, 30000000, 100000000, 500000000, 1000000000,
+    2000000000,
+  ])
+  .range(schemeBlues[8] as Iterable<number>);
 
 const globe = ref<GlobeInstance | undefined>();
 
