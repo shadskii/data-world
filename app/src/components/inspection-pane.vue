@@ -142,7 +142,7 @@ const chartOptions = computed(() => {
             :series="series"
           ></VueApexCharts>
         </div>
-        <div>
+        <div class="mt-2">
           <GenderRatioChart
             v-if="genderRatio"
             :male="genderRatio?.male"

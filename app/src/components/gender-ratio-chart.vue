@@ -108,10 +108,12 @@ const chartOptions = computed(() => {
 });
 </script>
 <template>
-  <VueApexCharts
-    type="bar"
-    height="120"
-    :options="chartOptions"
-    :series="series"
-  ></VueApexCharts>
+  <div class="border-slate-700 border-2 rounded-md">
+    <VueApexCharts
+      type="bar"
+      height="120"
+      :options="chartOptions"
+      :series="series"
+    ></VueApexCharts>
+  </div>
 </template>
