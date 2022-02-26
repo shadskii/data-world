@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import WorldMap from "@/components/world-map.vue";
+import ChloroplethGlobe from "@/components/chloropleth-globe.vue";
 import { storeToRefs } from "pinia";
 import { usePopulationDataStore } from "../stores/all-population-data";
 import { usePopulationParams } from "../stores/population-params";
@@ -26,7 +26,7 @@ const { populationMap, isLoading, worldPopulation } =
       <div class="absolute z-10 p-2 bottom-0">
         <YearSelect />
       </div>
-      <WorldMap
+      <ChloroplethGlobe
         v-if="populationMap"
         v-model="selectedCountry"
         :data="populationMap"
