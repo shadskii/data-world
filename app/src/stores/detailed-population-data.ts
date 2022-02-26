@@ -3,6 +3,7 @@ import { byFips, byIso } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { cubejsApi } from "../api";
+import { useCubeQuery } from "../composables/useCube";
 import { CountryCode3 } from "../types/countries";
 import { usePopulationParams } from "./population-params";
 
@@ -13,20 +14,6 @@ export const useDetailedPopulationDataStore = defineStore(
   () => {
     const populationParamStore = usePopulationParams();
     const { year, selectedCountry } = storeToRefs(populationParamStore);
-
-    const loading = ref(false);
-    const sex = ref<Sex>("Male");
-    /**
-     * male population for country by age.
-     */
-    const malePopulation = ref<[number, number][]>([]);
-    /**
-     * female population for country by age.
-     */
-    const femalePopulation = ref<[number, number][]>([]);
-
-    const infantMortality = ref(-1);
-    const lifeExpectancy = ref(-1);
 
     const query = computed<Query>(() => {
       if (!selectedCountry.value) return {};
@@ -57,16 +44,13 @@ export const useDetailedPopulationDataStore = defineStore(
         ],
       };
     });
-    async function fetchData() {
-      loading.value = true;
 
-      malePopulation.value = [];
-      femalePopulation.value = [];
-      infantMortality.value = -1;
-      lifeExpectancy.value = -1;
+    const { isLoading, resultSet, error } = useCubeQuery(query);
 
-      const cubeData = await cubejsApi.load(query.value);
-      const data = cubeData
+    const populationData = computed(() => {
+      if (!resultSet.value) return [];
+
+      return resultSet.value
         .tablePivot()
         .map((row) => {
           return {
@@ -76,38 +60,48 @@ export const useDetailedPopulationDataStore = defineStore(
           };
         })
         .sort((a, b) => a.age - b.age);
+    });
 
-      infantMortality.value = cubeData.tablePivot().at(0)?.[
-        "MortalityLifeExpectancy.infantMortality"
-      ]! as number;
-
-      lifeExpectancy.value = cubeData.tablePivot().at(0)?.[
-        "MortalityLifeExpectancy.lifeExpectancy"
-      ]! as number;
-
-      malePopulation.value = data
+    /**
+     * male population for country by age.
+     */
+    const malePopulation = computed(() => {
+      return populationData.value
         .filter((d) => {
           return d.sex === "Male";
         })
         .map((row) => [row.age, row.pop]);
-      femalePopulation.value = data
+    });
+
+    /**
+     * female population for country by age.
+     */
+    const femalePopulation = computed(() => {
+      return populationData.value
         .filter((d) => {
           return d.sex === "Female";
         })
         .map((row) => [row.age, row.pop]);
+    });
 
-      loading.value = false;
-    }
+    const infantMortality = computed(() => {
+      if (!resultSet.value) return -1;
 
-    watch(query, () => {
-      if (selectedCountry.value && year.value) {
-        fetchData();
-      }
+      return resultSet.value.tablePivot().at(0)?.[
+        "MortalityLifeExpectancy.infantMortality"
+      ]! as number;
+    });
+
+    const lifeExpectancy = computed(() => {
+      if (!resultSet.value) return -1;
+
+      return resultSet.value.tablePivot().at(0)?.[
+        "MortalityLifeExpectancy.lifeExpectancy"
+      ]! as number;
     });
 
     return {
-      loading,
-      sex,
+      isLoading,
       malePopulation,
       femalePopulation,
       infantMortality,

@@ -1,15 +1,45 @@
+import { Query } from "@cubejs-client/core";
 import { byFips, byIso } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { cubejsApi } from "../api";
+import { useCubeQuery } from "../composables/useCube";
 import { CountryCode3 } from "../types/countries";
 import { usePopulationParams } from "./population-params";
 
 export const usePopulationDataStore = defineStore("population-data", () => {
-  const loading = ref(false);
-  const populationMap = ref<Record<CountryCode3, number>>();
   const populationParamStore = usePopulationParams();
   const { year } = storeToRefs(populationParamStore);
+
+  const query = computed<Query>(() => {
+    return {
+      dimensions: [
+        "PredictedPopulation.country",
+        "PredictedPopulation.totalPopulation",
+      ],
+      timeDimensions: [
+        {
+          dimension: "DetailedPopulation.year",
+          granularity: "year",
+          dateRange: [`${year.value}`, `${year.value}`],
+        },
+      ],
+    };
+  });
+  const { isLoading, resultSet } = useCubeQuery(query);
+
+  const populationMap = computed<Record<CountryCode3, number> | undefined>(
+    () => {
+      if (!resultSet.value) return {} as Record<CountryCode3, number>;
+      return Object.fromEntries(
+        resultSet.value.tablePivot().map((row) => {
+          const countryCodeFips = row["PredictedPopulation.country"] as string;
+          const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
+          return [countryCodeIso3, row[`PredictedPopulation.totalPopulation`]];
+        })
+      );
+    }
+  );
 
   const worldPopulation = computed(() => {
     if (!populationMap.value) return 0;
@@ -18,36 +48,6 @@ export const usePopulationDataStore = defineStore("population-data", () => {
       0
     );
   });
-
-  async function fetchData() {
-    loading.value = true;
-
-    const cubeData = await cubejsApi.load({
-      filters: [],
-      dimensions: [
-        "PredictedPopulation.country",
-        "PredictedPopulation.totalPopulation",
-      ],
-      measures: [],
-      timeDimensions: [
-        {
-          dimension: "PredictedPopulation.year",
-          granularity: "year",
-          dateRange: [`${year.value}`, `${year.value}`],
-        },
-      ],
-    });
-    populationMap.value = Object.fromEntries(
-      cubeData.tablePivot().map((row) => {
-        const countryCodeFips = row["PredictedPopulation.country"] as string;
-        const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
-        return [countryCodeIso3, row[`PredictedPopulation.totalPopulation`]];
-      })
-    );
-
-    loading.value = false;
-  }
-  watch(year, fetchData, { immediate: true });
 
   /**
    * Population ranks for each country for the given year.
@@ -65,7 +65,7 @@ export const usePopulationDataStore = defineStore("population-data", () => {
 
   return {
     populationMap,
-    loading,
+    isLoading,
     worldPopulation,
     populationRanks,
   };

@@ -5,7 +5,7 @@ import { computed, reactive, toRefs } from "vue";
 import { formatOrdinal } from "../formatting/number-formatting";
 import { useCountryArea } from "../stores/country-area";
 import { useDetailedPopulationDataStore } from "../stores/detailed-population-data";
-import { usePopulationDataStore } from "../stores/population-data";
+import { usePopulationDataStore } from "../stores/all-population-data";
 import { CountryCode3, countryNames } from "../types/countries";
 import VueApexCharts from "vue3-apexcharts";
 
@@ -28,7 +28,7 @@ const detailedPopulationStore = useDetailedPopulationDataStore();
 const {
   femalePopulation,
   malePopulation,
-  loading,
+  isLoading,
   infantMortality,
   lifeExpectancy,
 } = storeToRefs(detailedPopulationStore);
@@ -122,7 +122,7 @@ const chartOptions = computed(() => {
         </span>
         <div class="relative h-90 mt-2 border-slate-700 border-2 rounded-md">
           <div
-            v-if="loading"
+            v-if="isLoading"
             class="absolute top-1/2 left-1/2 bottom-1/2 right-1/2 z-10"
           >
             <scaling-squares-spinner
@@ -140,13 +140,13 @@ const chartOptions = computed(() => {
         </div>
         <div>
           <span>Infant Mortality</span> -
-          <span v-if="!loading">
+          <span v-if="!isLoading">
             {{ infantMortality ? `${infantMortality.toFixed(3)}%` : "unknown" }}
           </span>
         </div>
         <div>
           <span>Life Expectancy</span> -
-          <span v-if="!loading">
+          <span v-if="!isLoading">
             {{ lifeExpectancy ? `${lifeExpectancy.toFixed(2)}` : "unknown" }}
           </span>
         </div>
