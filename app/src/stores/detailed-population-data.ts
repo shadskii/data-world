@@ -1,7 +1,7 @@
 import { Query } from "@cubejs-client/core";
 import { byIso } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useCubeQuery } from "../composables/useCube";
 import { usePopulationParams } from "./population-params";
 
@@ -25,7 +25,7 @@ export const useDetailedPopulationDataStore = defineStore(
             values: [countryFips!],
           },
         ],
-        measures: [],
+        measures: ["DetailedPopulation.totalMales"],
         dimensions: [
           "DetailedPopulation.age",
           "DetailedPopulation.population",
@@ -44,6 +44,48 @@ export const useDetailedPopulationDataStore = defineStore(
     });
 
     const { isLoading, resultSet, error } = useCubeQuery(query);
+
+    const { resultSet: genderPopResultSet } = useCubeQuery(
+      computed(() => {
+        if (!selectedCountry.value) return {};
+
+        const countryFips = byIso(selectedCountry.value!)?.fips;
+        return {
+          filters: [
+            {
+              member: "DetailedPopulation.country",
+              operator: "equals",
+              values: [countryFips!],
+            },
+          ],
+          measures: [
+            "DetailedPopulation.totalMales",
+            "DetailedPopulation.totalFemales",
+          ],
+          timeDimensions: [
+            {
+              dimension: "DetailedPopulation.year",
+              granularity: "year",
+              dateRange: [`${year.value}`, `${year.value}`],
+            },
+          ],
+        };
+      })
+    );
+
+    const genderRatio = computed(() => {
+      const data = genderPopResultSet.value?.tablePivot();
+      if (!data) return { male: 0, female: 0 };
+      const maleTotal = data[0]["DetailedPopulation.totalMales"] as number;
+      const femaleTotal = data[0]["DetailedPopulation.totalFemales"] as number;
+      const total = maleTotal + femaleTotal;
+      const male = (maleTotal / total) * 100;
+      const female = (femaleTotal / total) * 100;
+      return {
+        male,
+        female,
+      };
+    });
 
     const populationData = computed(() => {
       if (!resultSet.value) return [];
@@ -104,6 +146,7 @@ export const useDetailedPopulationDataStore = defineStore(
       femalePopulation,
       infantMortality,
       lifeExpectancy,
+      genderRatio,
     };
   }
 );

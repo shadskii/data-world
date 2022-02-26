@@ -9,7 +9,26 @@ cube(`DetailedPopulation`, {
     // Learn more here: https://cube.dev/docs/caching/pre-aggregations/getting-started
   },
 
-  measures: {},
+  measures: {
+    totalMales: {
+      sql: `${DetailedPopulation}.population`,
+      type: "sum",
+      filters: [
+        {
+          sql: `${DetailedPopulation}.sex = 'Male'`,
+        },
+      ],
+    },
+    totalFemales: {
+      sql: `${DetailedPopulation}.population`,
+      type: "sum",
+      filters: [
+        {
+          sql: `${DetailedPopulation}.sex = 'Female'`,
+        },
+      ],
+    },
+  },
 
   dimensions: {
     key: {

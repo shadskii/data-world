@@ -8,6 +8,7 @@ import { useDetailedPopulationDataStore } from "../stores/detailed-population-da
 import { usePopulationDataStore } from "../stores/all-population-data";
 import { CountryCode3, countryNames } from "../types/countries";
 import VueApexCharts from "vue3-apexcharts";
+import GenderRatioChart from "./gender-ratio-chart.vue";
 
 const props = defineProps<{
   selectedCountry: CountryCode3 | undefined;
@@ -30,6 +31,7 @@ const {
   isLoading: detailedPopulationIsLoading,
   infantMortality,
   lifeExpectancy,
+  genderRatio,
 } = storeToRefs(detailedPopulationStore);
 
 const isLoading = computed(() => {
@@ -139,6 +141,13 @@ const chartOptions = computed(() => {
             :options="chartOptions"
             :series="series"
           ></VueApexCharts>
+        </div>
+        <div>
+          <GenderRatioChart
+            v-if="genderRatio"
+            :male="genderRatio?.male"
+            :female="genderRatio?.female"
+          />
         </div>
         <div>
           <span>Infant Mortality</span> -
