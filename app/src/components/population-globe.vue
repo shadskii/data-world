@@ -1,26 +1,14 @@
 <script setup lang="ts">
 import WorldMap from "@/components/world-map.vue";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
 import { usePopulationDataStore } from "../stores/all-population-data";
-import {
-  MAX_YEAR,
-  MIN_YEAR,
-  usePopulationParams,
-} from "../stores/population-params";
-import BaseSelect from "./base-select.vue";
+import { usePopulationParams } from "../stores/population-params";
 import InspectionPane from "./inspection-pane.vue";
+import YearSelect from "./year-select.vue";
 
 const populationDataStore = usePopulationDataStore();
-
-const years = computed(() => {
-  return Array(MAX_YEAR - MIN_YEAR + 1)
-    .fill(MIN_YEAR)
-    .map((x, i) => x + i);
-});
-
 const populationParams = usePopulationParams();
-const { selectedCountry, year } = storeToRefs(populationParams);
+const { selectedCountry } = storeToRefs(populationParams);
 
 const { populationMap, isLoading, worldPopulation } =
   storeToRefs(populationDataStore);
@@ -36,7 +24,7 @@ const { populationMap, isLoading, worldPopulation } =
         <span class="font-thin"> total people </span>
       </div>
       <div class="absolute z-10 p-2 bottom-0">
-        <BaseSelect :values="years" v-model="year" />
+        <YearSelect />
       </div>
       <WorldMap
         v-if="populationMap"

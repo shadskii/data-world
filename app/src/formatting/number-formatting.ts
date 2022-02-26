@@ -18,4 +18,3 @@ export function formatOrdinal(number: number): string {
   const suffix = suffixes.get(ordinalRules.select(number)) || "";
   return `${number}${suffix}`;
 }
-console.log(formatOrdinal(101));

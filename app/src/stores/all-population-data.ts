@@ -1,8 +1,7 @@
 import { Query } from "@cubejs-client/core";
-import { byFips, byIso } from "country-code-lookup";
+import { byFips } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
-import { cubejsApi } from "../api";
+import { computed } from "vue";
 import { useCubeQuery } from "../composables/useCube";
 import { CountryCode3 } from "../types/countries";
 import { usePopulationParams } from "./population-params";
