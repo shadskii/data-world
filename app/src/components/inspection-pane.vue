@@ -17,22 +17,24 @@ const populationDataStore = usePopulationDataStore();
 
 const { populationMap, populationRanks } = storeToRefs(populationDataStore);
 const countryAreaStore = useCountryArea();
-const { countryAreaRanks } = storeToRefs(countryAreaStore);
-countryAreaStore.fetch();
-
-const countryArea = computed(() => {
-  return countryAreaStore.countryArea(selectedCountry.value!);
-});
+const {
+  countryAreaRanks,
+  isLoading: countryAreaIsLoading,
+  selectedCountryArea,
+} = storeToRefs(countryAreaStore);
 
 const detailedPopulationStore = useDetailedPopulationDataStore();
 const {
   femalePopulation,
   malePopulation,
-  isLoading,
+  isLoading: detailedPopulationIsLoading,
   infantMortality,
   lifeExpectancy,
 } = storeToRefs(detailedPopulationStore);
 
+const isLoading = computed(() => {
+  return countryAreaIsLoading.value || detailedPopulationIsLoading.value;
+});
 const series = computed(() => {
   return [
     {
@@ -107,7 +109,7 @@ const chartOptions = computed(() => {
         {{ countryNames[selectedCountry] }}
       </h2>
       <div>
-        {{ `${countryArea.toLocaleString()} km²` }}
+        {{ `${selectedCountryArea.toLocaleString()} km²` }}
         <span class="ordinal text-sm pl-1">
           - {{ formatOrdinal(countryAreaRanks[selectedCountry!]) }}
         </span>

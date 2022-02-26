@@ -2,7 +2,6 @@
 import WorldMap from "@/components/world-map.vue";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-import { useCountryArea } from "../stores/country-area";
 import { usePopulationDataStore } from "../stores/all-population-data";
 import {
   MAX_YEAR,
@@ -25,9 +24,6 @@ const { selectedCountry, year } = storeToRefs(populationParams);
 
 const { populationMap, isLoading, worldPopulation } =
   storeToRefs(populationDataStore);
-
-const countryAreaStore = useCountryArea();
-countryAreaStore.fetch();
 </script>
 <template>
   <div class="flex flex-row">
