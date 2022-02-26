@@ -13,16 +13,16 @@ export const useDetailedPopulationDataStore = defineStore(
     const populationParamStore = usePopulationParams();
     const { year, selectedCountry } = storeToRefs(populationParamStore);
 
-    const query = computed<Query>(() => {
-      if (!selectedCountry.value) return {};
+    const query = computed<Query | undefined>(() => {
+      if (!selectedCountry.value) return undefined;
 
-      const countryFips = byIso(selectedCountry.value!)?.fips;
+      const countryFips = byIso(selectedCountry.value)?.fips!;
       return {
         filters: [
           {
             member: "DetailedPopulation.country",
             operator: "equals",
-            values: [countryFips!],
+            values: [countryFips],
           },
         ],
         measures: ["DetailedPopulation.totalMales"],
@@ -47,7 +47,7 @@ export const useDetailedPopulationDataStore = defineStore(
 
     const { resultSet: genderPopResultSet } = useCubeQuery(
       computed(() => {
-        if (!selectedCountry.value) return {};
+        if (!selectedCountry.value) return undefined;
 
         const countryFips = byIso(selectedCountry.value!)?.fips;
         return {
