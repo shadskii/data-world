@@ -67,6 +67,7 @@ onMounted(async () => {
   globe.value = Globe();
   globe
     .value(container.value!)
+    .showGraticules(true)
     .polygonsData(polygons.features)
     .polygonStrokeColor(() => "#000")
     .polygonSideColor((c) => {
