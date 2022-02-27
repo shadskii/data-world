@@ -40,6 +40,75 @@ export const usePopulationDataStore = defineStore("population-data", () => {
     }
   );
 
+  const { resultSet: lifeExpectancyResultset } = useCubeQuery(
+    computed(() => {
+      return {
+        dimensions: [
+          "PredictedPopulation.country",
+          "MortalityLifeExpectancy.lifeExpectancy",
+        ],
+        timeDimensions: [
+          {
+            dimension: "DetailedPopulation.year",
+            granularity: "year",
+            dateRange: [`${year.value}`, `${year.value}`],
+          },
+        ],
+      };
+    })
+  );
+  const lifeExpectancyMap = computed<Record<CountryCode3, number> | undefined>(
+    () => {
+      if (!lifeExpectancyResultset.value)
+        return {} as Record<CountryCode3, number>;
+      return Object.fromEntries(
+        lifeExpectancyResultset.value.tablePivot().map((row) => {
+          const countryCodeFips = row["PredictedPopulation.country"] as string;
+          const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
+          return [
+            countryCodeIso3,
+            row[`MortalityLifeExpectancy.lifeExpectancy`],
+          ];
+        })
+      );
+    }
+  );
+
+  const { resultSet: infantMortalityResultset } = useCubeQuery(
+    computed(() => {
+      return {
+        dimensions: [
+          "PredictedPopulation.country",
+          "MortalityLifeExpectancy.infantMortality",
+        ],
+        timeDimensions: [
+          {
+            dimension: "DetailedPopulation.year",
+            granularity: "year",
+            dateRange: [`${year.value}`, `${year.value}`],
+          },
+        ],
+      };
+    })
+  );
+
+  const infantMortalityMap = computed<Record<CountryCode3, number> | undefined>(
+    () => {
+      if (!infantMortalityResultset.value)
+        return {} as Record<CountryCode3, number>;
+      return Object.fromEntries(
+        infantMortalityResultset.value.tablePivot().map((row) => {
+          const countryCodeFips = row["PredictedPopulation.country"] as string;
+          const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
+          return [
+            countryCodeIso3,
+            row[`MortalityLifeExpectancy.infantMortality`],
+          ];
+        })
+      );
+    }
+  );
+
   const worldPopulation = computed(() => {
     if (!populationMap.value) return 0;
     return Object.values(populationMap.value).reduce(
@@ -64,6 +133,8 @@ export const usePopulationDataStore = defineStore("population-data", () => {
 
   return {
     populationMap,
+    lifeExpectancyMap,
+    infantMortalityMap,
     isLoading,
     worldPopulation,
     populationRanks,

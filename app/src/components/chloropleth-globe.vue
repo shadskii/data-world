@@ -19,6 +19,10 @@ const props = defineProps<{
    * Put globe into loading state.
    */
   loading: boolean;
+  /**
+   * The color scale to use.
+   */
+  dataScale: number[];
 }>();
 
 interface CountryPolygon {
@@ -47,12 +51,11 @@ const selected = computed<CountryCode3 | undefined>({
   },
 });
 
-const colorScale = scaleThreshold()
-  .domain([
-    100000, 1000000, 10000000, 30000000, 100000000, 500000000, 1000000000,
-    2000000000,
-  ])
-  .range(schemeBlues[8] as Iterable<number>);
+const colorScale = computed(() => {
+  return scaleThreshold()
+    .domain(props.dataScale)
+    .range(schemeBlues[8] as Iterable<number>);
+});
 
 const globe = ref<GlobeInstance | undefined>();
 
@@ -76,7 +79,7 @@ onMounted(async () => {
     .height(container.value!.clientHeight)
     .polygonCapColor((c) => {
       const country = c as CountryPolygon;
-      return `${colorScale(props.data[country.id])}`;
+      return `${colorScale.value(props.data[country.id])}`;
     })
     .polygonAltitude(() => 0.02)
     .onPolygonClick((c) => {
@@ -122,7 +125,7 @@ watch(
   (d) => {
     globe.value?.polygonCapColor((c) => {
       const country = c as CountryPolygon;
-      return `${colorScale(d.data[country.id]) || "#aaa"}`;
+      return `${colorScale.value(d.data[country.id]) || "#aaa"}`;
     });
   },
   { deep: true }

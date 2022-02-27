@@ -5,33 +5,73 @@ import { usePopulationDataStore } from "../stores/all-population-data";
 import { usePopulationParams } from "../stores/population-params";
 import InspectionPane from "./inspection-pane.vue";
 import YearSelect from "./year-select.vue";
+import MultiSelect from "./multi-select.vue";
+import { computed } from "vue";
 
 const populationDataStore = usePopulationDataStore();
 const populationParams = usePopulationParams();
-const { selectedCountry } = storeToRefs(populationParams);
+const { selectedCountry, selectedDataView, allDataViews } =
+  storeToRefs(populationParams);
 
-const { populationMap, isLoading, worldPopulation } =
-  storeToRefs(populationDataStore);
+const {
+  populationMap,
+  isLoading,
+  worldPopulation,
+  lifeExpectancyMap,
+  infantMortalityMap,
+} = storeToRefs(populationDataStore);
+
+const data = computed(() => {
+  if (selectedDataView.value === "Population") {
+    return populationMap.value;
+  } else if (selectedDataView.value === "Life Expectancy") {
+    return lifeExpectancyMap.value;
+  } else if (selectedDataView.value === "Infant Mortality") {
+    return infantMortalityMap.value;
+  }
+});
+const dataScale = computed(() => {
+  if (selectedDataView.value === "Population") {
+    return [
+      100_000, 1_000_000, 10_000_000, 30_000_000, 100_000_000, 500_000_000,
+      1_000_000_000, 2_000_000_000,
+    ];
+  } else if (selectedDataView.value === "Life Expectancy") {
+    return [40, 50, 60, 65, 70, 75, 80, 85, 90];
+  } else if (selectedDataView.value === "Infant Mortality") {
+    return [0.5, 1, 3, 5, 10, 15, 20, 30];
+  }
+});
 </script>
 <template>
   <div class="flex flex-row">
     <InspectionPane :selected-country="selectedCountry!" />
     <div class="map bg-gray-900 relative">
-      <div class="text-white pt-2 absolute top-0 z-10 p-2">
-        <span class="text-2xl">
-          {{ worldPopulation.toLocaleString() }}
-        </span>
-        <span class="font-thin"> total people </span>
+      <div
+        class="text-white p-2 absolute top-0 z-10 flex justify-between left-0 right-0"
+      >
+        <div class="flex flex-col">
+          <div>
+            <span class="text-2xl">
+              {{ worldPopulation.toLocaleString() }}
+            </span>
+            <span class="font-thin"> total people </span>
+          </div>
+        </div>
+        <div>
+          <MultiSelect v-model="selectedDataView" :values="allDataViews" />
+        </div>
       </div>
       <div class="absolute z-10 p-2 bottom-0">
         <YearSelect />
       </div>
       <ChloroplethGlobe
-        v-if="populationMap"
+        v-if="data"
         v-model="selectedCountry"
-        :data="populationMap"
+        :data="data"
         class="w-full h-full"
         :loading="isLoading"
+        :data-scale="dataScale"
       />
     </div>
   </div>
