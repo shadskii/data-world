@@ -3,8 +3,9 @@ import { useResizeObserver } from "@vueuse/core";
 import { scaleThreshold, schemeBlues } from "d3";
 import Globe, { GlobeInstance } from "globe.gl";
 import { computed, onMounted, ref, watch } from "vue";
-import { CountryCode3 } from "../types/countries";
+import { convertTo2, CountryCode3 } from "../types/countries";
 import { ScalingSquaresSpinner } from "epic-spinners";
+import { countryCoordinates } from "../types/country-coordinates";
 
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
@@ -54,7 +55,7 @@ const selected = computed<CountryCode3 | undefined>({
 const colorScale = computed(() => {
   return scaleThreshold()
     .domain(props.dataScale)
-    .range(schemeBlues[8] as Iterable<number>);
+    .range(schemeBlues[9] as Iterable<number>);
 });
 
 const globe = ref<GlobeInstance | undefined>();
@@ -132,6 +133,9 @@ watch(
   { deep: true }
 );
 watch(selected, (code) => {
+  const countryCode2 = convertTo2(code!);
+  const coords = countryCoordinates[countryCode2];
+
   globe.value
     ?.polygonStrokeColor((c) => {
       const country = c as CountryPolygon;
@@ -149,6 +153,18 @@ watch(selected, (code) => {
       const country = c as CountryPolygon;
       return country.id === code ? 1 : 15;
     });
+  if (coords) {
+    globe.value
+      ?.pointOfView({ ...coords }, 1000)
+      .labelText(() => code!)
+      .labelsData([{}])
+      .labelAltitude(raised)
+      .labelDotRadius(0)
+      .labelSize(1.2)
+      .labelColor(() => "#000")
+      .labelLat(coords.lat)
+      .labelLng(coords.lng);
+  }
 });
 </script>
 <template>
