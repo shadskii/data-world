@@ -3,12 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "cubejs-server"
-  },
-  "template": "docker",
-  "templateVersion": "0.29.25",
-  "devDependencies": {
-    "@cubejs-backend/bigquery-driver": "^0.29.25",
-    "@cubejs-backend/server": "^0.29.25"
+    "start:backend": "pnpm --filter cube-backend dev",
+    "start:frontend": "pnpm --filter frontend dev"
   }
 }

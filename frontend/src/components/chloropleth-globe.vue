@@ -4,8 +4,8 @@ import { scaleThreshold, schemeBlues } from "d3";
 import { ScalingSquaresSpinner } from "epic-spinners";
 import Globe, { GlobeInstance } from "globe.gl";
 import { computed, onMounted, ref, watch } from "vue";
-import { convertTo2, CountryCode3 } from "../types/countries";
-import { getCountryCoordinates } from "../types/country-coordinates";
+import { convertTo2, CountryCode3 } from "../countries/countries";
+import { getCountryCoordinates } from "../countries/country-coordinates";
 
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";

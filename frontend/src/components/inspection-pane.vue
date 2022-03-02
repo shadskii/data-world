@@ -6,7 +6,7 @@ import { formatOrdinal } from "../formatting/number-formatting";
 import { useCountryArea } from "../stores/country-area";
 import { useDetailedPopulationDataStore } from "../stores/detailed-population-data";
 import { usePopulationDataStore } from "../stores/all-population-data";
-import { CountryCode3, getCountryName } from "../types/countries";
+import { CountryCode3, getCountryName } from "../countries/countries";
 import VueApexCharts from "vue3-apexcharts";
 import GenderRatioChart from "./gender-ratio-chart.vue";
 
