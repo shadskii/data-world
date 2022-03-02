@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { CountryCode3 } from "../types/countries";
+import { CountryCode3 } from "../countries/countries";
 
 export const MIN_YEAR = 1982;
 export const MAX_YEAR = 2050;

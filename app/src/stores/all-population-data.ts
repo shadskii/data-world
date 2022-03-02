@@ -3,7 +3,7 @@ import { byFips } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useCubeQuery } from "../composables/useCube";
-import { CountryCode3 } from "../types/countries";
+import { CountryCode3 } from "../countries/countries";
 import { usePopulationParams } from "./population-params";
 
 export const usePopulationDataStore = defineStore("population-data", () => {
