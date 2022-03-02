@@ -36,7 +36,6 @@ export const usePopulationDataStore = defineStore("population-data", () => {
           // country-code-lookup uses VM for Vietnam instead of VM
           const countryCodeIso3 =
             countryCodeFips === "VM" ? "VNM" : byFips(countryCodeFips)?.iso3;
-          if (!countryCodeIso3) console.log(countryCodeFips);
           return [countryCodeIso3, row[`PredictedPopulation.totalPopulation`]];
         })
       );

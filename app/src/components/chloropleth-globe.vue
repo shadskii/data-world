@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useResizeObserver } from "@vueuse/core";
 import { scaleThreshold, schemeBlues } from "d3";
+import { ScalingSquaresSpinner } from "epic-spinners";
 import Globe, { GlobeInstance } from "globe.gl";
 import { computed, onMounted, ref, watch } from "vue";
 import { convertTo2, CountryCode3 } from "../types/countries";
-import { ScalingSquaresSpinner } from "epic-spinners";
-import { countryCoordinates } from "../types/country-coordinates";
+import { getCountryCoordinates } from "../types/country-coordinates";
 
 const polygonCapColor = "#011e26";
 const polygonSideColor = "#013543";
@@ -134,7 +134,7 @@ watch(
 );
 watch(selected, (code) => {
   const countryCode2 = convertTo2(code!);
-  const coords = countryCoordinates[countryCode2];
+  const coords = getCountryCoordinates(countryCode2);
 
   globe.value
     ?.polygonStrokeColor((c) => {

@@ -1,11 +1,17 @@
-import { CountryCode2 } from "./countries";
+import type { CountryCode2 } from "./countries";
+
+/**
+ * Global coordinate in Lat/Lng.
+ */
+export type Coordinate = {
+  lat: number;
+  lng: number;
+};
 
 /**
  * Country coordinates for labelling.
  */
-export const countryCoordinates: Partial<
-  Record<CountryCode2, { lat: number; lng: number }>
-> = {
+export const countryCoordinates: Partial<Record<CountryCode2, Coordinate>> = {
   AD: { lat: 42.546245, lng: 1.601554 },
   AE: { lat: 23.424076, lng: 53.847818 },
   AF: { lat: 33.93911, lng: 67.709953 },
@@ -251,3 +257,18 @@ export const countryCoordinates: Partial<
   ZM: { lat: -13.133897, lng: 27.849332 },
   ZW: { lat: -19.015438, lng: 29.154857 },
 };
+
+/**
+ * Gets the coordinates of a country by its ISO 3166-1 alpha-2 code.
+ *
+ * @param cc2 ISO 3166-1 alpha-2 country code
+ * @returns The coordinates for the center-ish of the country.  If the country is not found, returns undefined.
+ */
+export function getCountryCoordinates(
+  cc2?: CountryCode2
+): Coordinate | undefined {
+  if (!cc2) {
+    return undefined;
+  }
+  return countryCoordinates[cc2];
+}

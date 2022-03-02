@@ -6,7 +6,7 @@ import { formatOrdinal } from "../formatting/number-formatting";
 import { useCountryArea } from "../stores/country-area";
 import { useDetailedPopulationDataStore } from "../stores/detailed-population-data";
 import { usePopulationDataStore } from "../stores/all-population-data";
-import { CountryCode3, countryNames } from "../types/countries";
+import { CountryCode3, getCountryName } from "../types/countries";
 import VueApexCharts from "vue3-apexcharts";
 import GenderRatioChart from "./gender-ratio-chart.vue";
 
@@ -108,7 +108,7 @@ const chartOptions = computed(() => {
       </div>
       <hr />
       <h2 class="text-2xl mt-2 font-bold">
-        {{ countryNames[selectedCountry] }}
+        {{ getCountryName(selectedCountry) }}
       </h2>
       <div>
         {{ `${selectedCountryArea.toLocaleString()} km²` }}
