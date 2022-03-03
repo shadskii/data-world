@@ -3,6 +3,7 @@ import { byFips } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useCubeQuery } from "../composables/useCube";
+import type { TypedQuery } from "../composables/useCube";
 import { CountryCode3 } from "../countries/countries";
 import { usePopulationParams } from "./population-params";
 
@@ -10,7 +11,7 @@ export const usePopulationDataStore = defineStore("population-data", () => {
   const populationParamStore = usePopulationParams();
   const { year } = storeToRefs(populationParamStore);
 
-  const query = computed<Query>(() => {
+  const query = computed<TypedQuery>(() => {
     return {
       dimensions: [
         "PredictedPopulation.country",
@@ -32,11 +33,11 @@ export const usePopulationDataStore = defineStore("population-data", () => {
       if (!resultSet.value) return {} as Record<CountryCode3, number>;
       return Object.fromEntries(
         resultSet.value.tablePivot().map((row) => {
-          const countryCodeFips = row["PredictedPopulation.country"] as string;
+          const countryCodeFips = row["PredictedPopulation.country"];
           // country-code-lookup uses VM for Vietnam instead of VM
           const countryCodeIso3 =
             countryCodeFips === "VM" ? "VNM" : byFips(countryCodeFips)?.iso3;
-          return [countryCodeIso3, row[`PredictedPopulation.totalPopulation`]];
+          return [countryCodeIso3, row["PredictedPopulation.totalPopulation"]];
         })
       );
     }
@@ -63,9 +64,10 @@ export const usePopulationDataStore = defineStore("population-data", () => {
     () => {
       if (!lifeExpectancyResultset.value)
         return {} as Record<CountryCode3, number>;
+      console.log(lifeExpectancyResultset.value.tablePivot());
       return Object.fromEntries(
         lifeExpectancyResultset.value.tablePivot().map((row) => {
-          const countryCodeFips = row["PredictedPopulation.country"] as string;
+          const countryCodeFips = row["PredictedPopulation.country"];
           const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
           return [
             countryCodeIso3,
@@ -100,7 +102,7 @@ export const usePopulationDataStore = defineStore("population-data", () => {
         return {} as Record<CountryCode3, number>;
       return Object.fromEntries(
         infantMortalityResultset.value.tablePivot().map((row) => {
-          const countryCodeFips = row["PredictedPopulation.country"] as string;
+          const countryCodeFips = row["PredictedPopulation.country"];
           const countryCodeIso3 = byFips(countryCodeFips)?.iso3;
           return [
             countryCodeIso3,

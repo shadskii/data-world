@@ -3,6 +3,7 @@ import { byFips } from "country-code-lookup";
 import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useCubeQuery } from "../composables/useCube";
+import type { TypedQuery } from "../composables/useCube";
 import { CountryCode3 } from "../countries/countries";
 import { usePopulationParams } from "./population-params";
 
@@ -13,7 +14,7 @@ export const useCountryArea = defineStore("country-area", () => {
   const populationParamStore = usePopulationParams();
   const { selectedCountry } = storeToRefs(populationParamStore);
 
-  const query = computed<Query>(() => {
+  const query = computed<TypedQuery>(() => {
     return {
       dimensions: ["Areas.area", "Areas.country"],
     };
@@ -27,9 +28,10 @@ export const useCountryArea = defineStore("country-area", () => {
     if (!resultSet.value) return {} as Record<CountryCode3, number>;
     return Object.fromEntries(
       resultSet.value.tablePivot().map((row) => {
-        const countryCodeFips = row["Areas.country"] as string;
+        const countryCodeFips = row["Areas.country"];
         const countryCodeIso3 = byFips(countryCodeFips)?.iso3 as CountryCode3;
-        return [countryCodeIso3, row["Areas.area"] as number];
+        const area = row["Areas.area"];
+        return [countryCodeIso3, area];
       })
     );
   });
