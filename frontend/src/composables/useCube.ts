@@ -8,7 +8,7 @@ import {
 } from "@cubejs-client/core";
 import { Ref, ref, watch } from "vue";
 import { cubejsApi } from "../api";
-import { Sex } from "../stores/detailed-population-data";
+import { CubeDimensions, CubeMeasures } from "./cube-types";
 
 export function useCubeQuery(query: Ref<TypedQuery | undefined>): {
   error: Ref<Error | undefined>;
@@ -46,33 +46,6 @@ export function useCubeQuery(query: Ref<TypedQuery | undefined>): {
     error,
     refetch,
   };
-}
-
-interface CubeDimensions {
-  "PredictedPopulation.totalPopulation": number;
-  "PredictedPopulation.country": string;
-  "PredictedPopulation.year": string;
-
-  "DetailedPopulation.key": string;
-  "DetailedPopulation.population": number;
-  "DetailedPopulation.sex": Sex;
-  "DetailedPopulation.age": number;
-  "DetailedPopulation.country": string;
-  "DetailedPopulation.year": string;
-
-  "MortalityLifeExpectancy.key": string;
-  "MortalityLifeExpectancy.lifeExpectancy": number;
-  "MortalityLifeExpectancy.infantMortality": number;
-
-  "Areas.country": string;
-  "Areas.area": number;
-}
-
-interface CubeMeasures {
-  "DetailedPopulation.totalMales": number;
-  "DetailedPopulation.totalFemales": number;
-
-  "PredictedPopulation.numberOfCountries": number;
 }
 
 /**

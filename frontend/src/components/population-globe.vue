@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import ChloroplethGlobe from "@/components/chloropleth-globe.vue";
+import { byIso } from "country-code-lookup";
 import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import type { CountryCode3 } from "../countries/countries";
 import { usePopulationDataStore } from "../stores/all-population-data";
 import { usePopulationParams } from "../stores/population-params";
 import InspectionPane from "./inspection-pane.vue";
-import YearSelect from "./year-select.vue";
 import MultiSelect from "./multi-select.vue";
-import { computed } from "vue";
-import type { CountryCode3 } from "../types/countries";
-import { byFips, byIso } from "country-code-lookup";
+import YearSelect from "./year-select.vue";
 
 const populationDataStore = usePopulationDataStore();
 const populationParams = usePopulationParams();
