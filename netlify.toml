@@ -5,4 +5,4 @@
 
 [build]
   publish = "frontend/dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && cd frontend && npm run build"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npm run build"
