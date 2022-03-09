@@ -3,5 +3,6 @@
 node_modules
 .cubestore
 upstream
+.pnpm-debug.log
 
 bigquery-service-account.json
