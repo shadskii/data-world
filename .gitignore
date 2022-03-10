@@ -6,3 +6,5 @@ upstream
 .pnpm-debug.log
 
 bigquery-service-account.json
+# Local Netlify folder
+.netlify
