@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@cubejs-client/core": "^0.29.23",
-    "@cubejs-client/vue": "^0.29.23",
     "@vueuse/core": "^7.6.2",
     "apexcharts": "^3.33.1",
     "country-code-lookup": "^0.0.20",

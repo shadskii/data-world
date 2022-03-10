@@ -1134,7 +1134,7 @@
     ramda "^0.27.1"
     source-map-support "^0.5.19"
 
-"@cubejs-client/core@^0.29.23", "@cubejs-client/core@^0.29.29":
+"@cubejs-client/core@^0.29.23":
   version "0.29.29"
   resolved "https://registry.yarnpkg.com/@cubejs-client/core/-/core-0.29.29.tgz#0d2e89f71a08aa8e08166dfa35c294ec278ba7b0"
   integrity sha512-wHwxeSude7Aj+wGbTDhbU8nJ/UAyyg5woiVREieYOEa+MtIr+CoIkNdaBb7WZJGbvnrf4dydO5KsT/MFq21xSA==
@@ -1147,15 +1147,6 @@
     ramda "^0.27.0"
     url-search-params-polyfill "^7.0.0"
     uuid "^8.3.2"
-
-"@cubejs-client/vue@^0.29.23":
-  version "0.29.29"
-  resolved "https://registry.yarnpkg.com/@cubejs-client/vue/-/vue-0.29.29.tgz#ff97ba07785ae1b3b6d66ae1958f82a8fb622662"
-  integrity sha512-fM7nZqsJzUbikHTy57ILq63EB2XiaVSF6dcj1kvMS7cAl4v02qZ61rWfmkILRFEQNYwHLYEPvks9/gWYB2l/jw==
-  dependencies:
-    "@cubejs-client/core" "^0.29.29"
-    core-js "^3.6.5"
-    ramda "^0.27.0"
 
 "@emmetio/abbreviation@^2.2.3":
   version "2.2.3"
