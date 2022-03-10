@@ -3,6 +3,6 @@
   NODE_VERSION = "16"
 
 [build]
-  base = "frontend
+  base = "frontend"
   publish = "dist"
   command = "build"
