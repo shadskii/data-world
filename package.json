@@ -2,8 +2,12 @@
   "name": "data-world",
   "version": "0.0.1",
   "private": true,
+  "workspaces": [
+    "frontend",
+    "cube-backend"
+  ],
   "scripts": {
-    "start:backend": "pnpm --filter cube-backend dev",
-    "start:frontend": "pnpm --filter frontend dev"
+    "start:backend": "yarn cube-backend dev",
+    "start:frontend": "yarn frontend dev"
   }
 }
